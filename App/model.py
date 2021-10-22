@@ -38,8 +38,39 @@ los mismos.
 """
 
 # Construccion de modelos
+def newCatalog():
+    """
+    Inicializa el catálogo de avistamientos de UFOS
+    """
+
+    catalog = {}
+    catalog['ufos'] = lt.newList('ufos')
+
+    return catalog
+    
 
 # Funciones para agregar informacion al catalogo
+
+def AddUFOCatalog(catalog, ufo):
+    """
+    Agrega un avistamiento de UFO al catálogo
+    """
+    info = {}
+    info['city'] = ufo['city']
+    info['state'] = ufo['state']
+    info['country'] = ufo['country']
+    info['datetime'] = ufo['datetime']
+    info['dateposted'] = ufo['dateposted']
+    info['time'] = ufo['time']
+    info['duration'] = int(ufo['duration'])
+    info['shape'] = ufo['shape']
+    info['description'] = ufo['description']
+    info['latitude'] = ufo['latitude']
+    info['longitude'] = ufo['longitude']
+    info['height'] = ufo['height']
+    info['comments'] = ufo['comments']
+
+    lt.addLast(catalog['ufos'], info)
 
 # Funciones para creacion de datos
 
