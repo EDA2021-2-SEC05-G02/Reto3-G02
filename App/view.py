@@ -61,6 +61,14 @@ def PrintTopCities(info):
         x.add_row([ i["city"], i["count"]])
     print(x)
 
+
+def PrintTopDuration(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["Duration", "Count"]
+    for i in lt.iterator(info):
+        x.add_row([ i["duration"], i["count"]])
+    print(x)
+
 def printUfosTable(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Datetime", "City", "State", "Country", "Shape", "Duration (seconds)"]
@@ -117,8 +125,14 @@ while True:
         
 
     elif int(inputs[0]) == 3:
+        minimo = float(input('Ingrese el valor minimo: '))
+        maximo = float(input('Ingrese el valor maximo: '))
         duration = controller.getUFOTopDuration(catalog)
-        print(duration)
+        PrintTopDuration(duration[0])
+        # Arreglar el view
+        dur = controller.getUFOByDuration(catalog, minimo, maximo)
+        for x in lt.iterator(dur):
+            print(x)
 
         pass
         
