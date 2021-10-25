@@ -53,7 +53,7 @@ def newCatalog():
                                      comparefunction=compareString)
 
     catalog['durationIndex'] = om.newMap(omaptype='BST',
-                                     comparefunction=cmpDurationIndex)
+                                     comparefunction=compareFloat)
 
 
     return catalog
@@ -105,6 +105,7 @@ def updateCityIndex (mapa, ufo):
         cityentry = me.getValue(entry)
 
     lt.addLast(cityentry['ufos'], ufo)
+    cityentry['size']+=1
 
 
 def updateDurationIndex (mapa, ufo):
@@ -131,7 +132,7 @@ def newCity(city):
     Crea una entrada en el indice por fechas, es decir en el arbol
     binario.
     """
-    entry = {'city': None, 'ufos': None}
+    entry = {'city': None, 'ufos': None, 'size':0}
     entry['city'] = city
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
@@ -146,8 +147,6 @@ def newDuration(duration):
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
     
-
-
 # Funciones para creacion de datos
 
 
@@ -192,42 +191,44 @@ def indexSize(catalog, indice):
 
 def getUFOTopCity(catalog):
     """
-    Retorna los avistamientos de una ciudad
-    
-    Req 1
-
+    Req 1:
+    Retorna el Top 5 ciudades con mas avistamientos
     """
     lista = lt.newList('ARRAY_LIST')
-    cit = om.keySet(catalog['cityIndex'])
-    for key in lt.iterator(cit):
+    keys = om.keySet(catalog['cityIndex']) 
+    size = 0
+    for key in lt.iterator(keys):
         entry = om.get(catalog['cityIndex'], key)
-        city = me.getValue(entry)['ufos']
-        lt.addLast(lista, {'city': key, 'count': lt.size(city)})
-    mer.sort(lista, lambda x, y: x['count'] >= y['count'])
+        value = me.getValue(entry)
+        size = value['size']
+        info={'city': key,
+              'count': size}
+        lt.addLast(lista, info)
+
+    mer.sort(lista, cmpByCount)
     five = getFirst(lista, 5)
-    return five, lt.size(lista)
+
+    return five, lt.size(keys)
 
 def getUFOByCity(catalog, city):
-
     """
-    Req 1
-
+    Req 1:
     """
-    cit = om.get(catalog['cityIndex'], city)
-    if cit['key'] is not None:
-        value = me.getValue(cit)['ufos']
-        mer.sort(value, lambda x, y: x['datetime'] <= y['datetime'])
-        first = getFirst(value, 3)
-        last = getLast(value, 3)
-    return first, last
+    entry = om.get(catalog['cityIndex'], city)
+    if entry:
+        value = me.getValue(entry)
+        ltUfos = value['ufos']
+        size = value['size']
+        mer.sort(ltUfos, cmpDate)
+
+        return ltUfos, size
+    else:
+        return None
 
 
 def getUFOTopDuration(catalog):
     """
-    Retorna los avistamientos por duracion
-    
     Req 2
-
     """
     lista = lt.newList('ARRAY_LIST')
     dur = om.keySet(catalog['durationIndex'])
@@ -267,10 +268,27 @@ def compareString(str1, str2):
     else:
         return -1
 
-def cmpDuration(x, y):
-    return x['duration'] > y['duration']
+def compareFloat(num1, num2):
+    """
+    Compara dos Floats
+    """
+    num1 = float(num1)
+    num2 = float(num2)
+    if (num1 == num2):
+        return 0
+    elif (num1 > num2):
+        return 1
+    else:
+        return -1
 
-def cmpDurationIndex(x, y):
-    return x > y
+def cmpByCount (city1, city2):
+    return city1['count'] > city2['count']
+
+def cmpDuration(ufo1, ufo2):
+    return ufo1['duration'] > ufo2['duration']
+
+def cmpDate (ufo1, ufo2):
+    return ufo1['datetime'] < ufo2['datetime']
+
 
 # Funciones de ordenamiento

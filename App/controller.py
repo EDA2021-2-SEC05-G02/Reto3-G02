@@ -67,14 +67,40 @@ def indexHeight(catalog, indice):
 def indexSize(catalog, indice):
     return model.indexSize(catalog, indice)
 
+def getLast(lista, num):
+    """
+    Retorna los ultimos 'num' elementos de una lista.
+    """
+    return model.getLast(lista, num)
+
+def getFirst(lista, num):
+    """
+    Retorna los primeros 'num' elementos de una lista.
+    """
+    return model.getFirst(lista, num)
+
+#Requeriminetos
+
 def getUFOTopCity(catalog):
+    """
+    Req 1
+    """
     return model.getUFOTopCity(catalog)
 
 def getUFOByCity(catalog, city):
+    """
+    Req 1
+    """
     return model.getUFOByCity(catalog, city)
 
 def getUFOTopDuration(catalog):
+    """
+    Req 2
+    """
     return model.getUFOTopDuration(catalog)
 
 def getUFOByDuration(catalog, minimo, maximo):
+    """
+    Req 2
+    """
     return model.getUFOByDuration(catalog, minimo, maximo)
