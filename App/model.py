@@ -52,6 +52,10 @@ def newCatalog():
     catalog['cityIndex'] = om.newMap(omaptype='BST',
                                      comparefunction=compareString)
 
+    catalog['durationIndex'] = om.newMap(omaptype='BST',
+                                     comparefunction=cmpDurationIndex)
+
+
     return catalog
     
 
@@ -81,6 +85,7 @@ def addUFO(catalog, ufo):
 
     lt.addLast(catalog['Ufos'], info)
     updateCityIndex(catalog['cityIndex'], info)
+    updateDurationIndex(catalog['durationIndex'], info)
 
 def updateCityIndex (mapa, ufo):
     """
@@ -101,6 +106,26 @@ def updateCityIndex (mapa, ufo):
 
     lt.addLast(cityentry['ufos'], ufo)
 
+
+def updateDurationIndex (mapa, ufo):
+    """
+    Se toma la fecha del crimen y se busca si ya existe en el arbol
+    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
+    y se actualiza el indice de tipos de crimenes.
+
+    Si no se encuentra creado un nodo para esa fecha en el arbol
+    se crea y se actualiza el indice de tipos de crimenes
+    """
+    ufoduration = ufo['duration (seconds)']
+    entry = om.get(mapa, ufoduration)
+    if entry is None:
+        durationentry = newDuration(ufoduration)
+        om.put(mapa, ufoduration, durationentry)
+    else:
+        durationentry = me.getValue(entry)
+
+    lt.addLast(durationentry['ufos'], ufo)
+
 def newCity(city):
     """
     Crea una entrada en el indice por fechas, es decir en el arbol
@@ -110,6 +135,18 @@ def newCity(city):
     entry['city'] = city
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
+    
+def newDuration(duration):
+    """
+    Crea una entrada en el indice por fechas, es decir en el arbol
+    binario.
+    """
+    entry = {'duration': None, 'ufos': None}
+    entry['duration'] = duration
+    entry['ufos'] = lt.newList('ARRAY_LIST')
+    return entry
+    
+
 
 # Funciones para creacion de datos
 
@@ -185,6 +222,25 @@ def getUFOByCity(catalog, city):
     return first, last
 
 
+def getUFOTopDuration(catalog):
+    """
+    Retorna los avistamientos por duracion
+    
+    Req 2
+
+    """
+    lista = lt.newList('ARRAY_LIST')
+    dur = om.keySet(catalog['durationIndex'])
+    for key in lt.iterator(dur):
+        entry = om.get(catalog['durationIndex'], key)
+        duration = me.getValue(entry)['ufos']
+        lt.addLast(lista, {'duration': key})
+    mer.sort(lista, cmpDuration)
+    five = getFirst(lista, 5)
+    return dur
+
+
+
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
@@ -210,5 +266,11 @@ def compareString(str1, str2):
         return 1
     else:
         return -1
+
+def cmpDuration(x, y):
+    return x['duration'] > y['duration']
+
+def cmpDurationIndex(x, y):
+    return x > y
 
 # Funciones de ordenamiento

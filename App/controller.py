@@ -72,3 +72,9 @@ def getUFOTopCity(catalog):
 
 def getUFOByCity(catalog, city):
     return model.getUFOByCity(catalog, city)
+
+def getUFOTopDuration(catalog):
+    return model.getUFOTopDuration(catalog)
+
+def getUFOByDuration(catalog, minimo, maximo):
+    return model.getUFOByDuration(catalog, minimo, maximo)

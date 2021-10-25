@@ -83,15 +83,20 @@ while True:
         print('Avistamientos cargadas:', controller.UfosSize(catalog))
         print('Altura del arbol de cityIndex:', controller.indexHeight(catalog,'cityIndex'))
         print('Elementos en el arbol de cityIndex:',controller.indexSize(catalog, 'cityIndex'))
-
     elif int(inputs[0]) == 2:
+        city = input('Ingrese la ciudad: ')
         numcity = controller.getUFOTopCity(catalog)
         print('Total: ' + str(numcity[1]))
         printTopTable(numcity[0])
-        city = input('Ingrese la ciudad: ')
         top = controller.getUFOByCity(catalog, city)
         for x in top:
             printTable(x)
+
+    elif int(inputs[0]) == 3:
+        duration = controller.getUFOTopDuration(catalog)
+        print(duration)
+
+        pass
         
         
     else:
