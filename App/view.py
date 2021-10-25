@@ -24,6 +24,8 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+import prettytable
+from prettytable import PrettyTable
 assert cf
 
 
@@ -47,6 +49,26 @@ def printMenu():
 
 catalog = None
 
+# Funciones para la impresión de tablas
+
+def printTopTable(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["city", "count"]
+    for i in lt.iterator(info):
+        x.add_row([ i["city"], i["count"]])
+
+    print(x)
+
+def printTable(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["datetime", "city", "state", "country", "shape", "duration(seconds)"]
+    for i in lt.iterator(info):
+        x.add_row([ i["datetime"], i["city"], 
+                    i["state"], i["country"], 
+                    i["shape"], i["duration (seconds)"]])
+    print(x)
+
+
 """
 Menu principal
 """
@@ -59,11 +81,19 @@ while True:
         print("Cargando información de los archivos ....")
         controller.loadData(catalog)
         print('Avistamientos cargadas:', controller.UfosSize(catalog))
-
-    elif int(inputs[0]) == 2:
         print('Altura del arbol de cityIndex:', controller.indexHeight(catalog,'cityIndex'))
         print('Elementos en el arbol de cityIndex:',controller.indexSize(catalog, 'cityIndex'))
 
+    elif int(inputs[0]) == 2:
+        numcity = controller.getUFOTopCity(catalog)
+        print('Total: ' + str(numcity[1]))
+        printTopTable(numcity[0])
+        city = input('Ingrese la ciudad: ')
+        top = controller.getUFOByCity(catalog, city)
+        for x in top:
+            printTable(x)
+        
+        
     else:
         sys.exit(0)
 sys.exit(0)

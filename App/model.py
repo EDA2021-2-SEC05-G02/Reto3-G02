@@ -46,7 +46,7 @@ def newCatalog():
     """
 
     catalog = {'Ufos': None,
-                'dateIndex': None}
+               'dateIndex': None}
 
     catalog['Ufos'] = lt.newList('ARRAY_LIST')
     catalog['cityIndex'] = om.newMap(omaptype='BST',
@@ -113,7 +113,24 @@ def newCity(city):
 
 # Funciones para creacion de datos
 
+
+
+
 # Funciones de consulta
+
+def getFirst(lista, num):
+    """
+    Retorna los primeros num elementos de una lista
+    """
+    lista = lt.subList(lista, 1, num)
+    return lista
+
+def getLast(lista, num):
+    """
+    Retorna los ultimos num elementos de una lista
+    """
+    lista = lt.subList(lista, lt.size(lista)-(num-1), num)
+    return lista
 
 def UfosSize(catalog):
     """
@@ -133,6 +150,41 @@ def indexSize(catalog, indice):
     Numero de elementos en el indice
     """
     return om.size(catalog[indice])
+
+
+
+def getUFOTopCity(catalog):
+    """
+    Retorna los avistamientos de una ciudad
+    
+    Req 1
+
+    """
+    lista = lt.newList('ARRAY_LIST')
+    cit = om.keySet(catalog['cityIndex'])
+    for key in lt.iterator(cit):
+        entry = om.get(catalog['cityIndex'], key)
+        city = me.getValue(entry)['ufos']
+        lt.addLast(lista, {'city': key, 'count': lt.size(city)})
+    mer.sort(lista, lambda x, y: x['count'] >= y['count'])
+    five = getFirst(lista, 5)
+    return five, lt.size(lista)
+
+def getUFOByCity(catalog, city):
+
+    """
+    Req 1
+
+    """
+    cit = om.get(catalog['cityIndex'], city)
+    if cit['key'] is not None:
+        value = me.getValue(cit)['ufos']
+        mer.sort(value, lambda x, y: x['datetime'] <= y['datetime'])
+        first = getFirst(value, 3)
+        last = getLast(value, 3)
+    return first, last
+
+
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista

@@ -66,3 +66,9 @@ def indexHeight(catalog, indice):
 
 def indexSize(catalog, indice):
     return model.indexSize(catalog, indice)
+
+def getUFOTopCity(catalog):
+    return model.getUFOTopCity(catalog)
+
+def getUFOByCity(catalog, city):
+    return model.getUFOByCity(catalog, city)
