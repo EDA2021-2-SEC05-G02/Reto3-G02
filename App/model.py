@@ -24,7 +24,6 @@
  * Dario Correal - Version inicial
  """
 
-
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
@@ -45,8 +44,7 @@ def newCatalog():
     Inicializa el catálogo de avistamientos de UFOS
     """
 
-    catalog = {'Ufos': None,
-               'dateIndex': None}
+    catalog = {}
 
     catalog['Ufos'] = lt.newList('ARRAY_LIST')
 
@@ -58,6 +56,12 @@ def newCatalog():
                         
     catalog['timeIndex'] = om.newMap(omaptype='BST',
                                      comparefunction=compareTime)
+                                    
+    catalog['dateIndex'] = om.newMap(omaptype='BST',
+                                     comparefunction=compareTime)
+
+    catalog['latitudeIndex'] = om.newMap(omaptype='BST',
+                                     comparefunction=compareFloat)
 
     return catalog
     
@@ -84,11 +88,12 @@ def addUFO(catalog, ufo):
         if info[key] == "":
             info[key] = "Unknown"
 
-
     lt.addLast(catalog['Ufos'], info)
     updateCityIndex(catalog['cityIndex'], info)
     updateDurationIndex(catalog['durationIndex'], info)
     updateTimeIndex(catalog['timeIndex'], info)
+    updateDateIndex(catalog['dateIndex'], info)
+    updatelatitudeIndex(catalog['latitudeIndex'], info)
 
 def updateCityIndex (mapa, ufo):
     """
@@ -148,7 +153,67 @@ def updateTimeIndex (mapa, ufo):
 
     lt.addLast(timeentry['ufos'], ufo)
     timeentry['size'] += 1
-    
+
+def updateDateIndex (mapa, ufo):
+    """
+    Se toma la fecha del crimen y se busca si ya existe en el arbol
+    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
+    y se actualiza el indice de tipos de crimenes.
+
+    Si no se encuentra creado un nodo para esa fecha en el arbol
+    se crea y se actualiza el indice de tipos de crimenes
+    """
+    ufodate = ufo['datetime'].date()
+    entry = om.get(mapa, ufodate)
+    if entry is None:
+        dateentry = newDate(ufodate)
+        om.put(mapa, ufodate, dateentry)
+    else:
+        dateentry = me.getValue(entry)
+
+    lt.addLast(dateentry['ufos'], ufo)
+    dateentry['size'] += 1
+
+def updatelatitudeIndex (mapa, ufo):
+    """
+    Se toma la fecha del crimen y se busca si ya existe en el arbol
+    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
+    y se actualiza el indice de tipos de crimenes.
+
+    Si no se encuentra creado un nodo para esa fecha en el arbol
+    se crea y se actualiza el indice de tipos de crimenes
+    """
+    ufolatitud = ufo['latitude']
+    entry = om.get(mapa, ufolatitud)
+    if entry is None:
+        latitudentry = newlatitude(ufolatitud)
+        om.put(mapa, ufolatitud, latitudentry)
+    else:
+        latitudentry = me.getValue(entry)
+
+    lt.addLast(latitudentry['ufos'], ufo)
+    latitudentry['size'] += 1
+    updatelongitudeIndex(latitudentry['longitude'], ufo)
+
+def updatelongitudeIndex (mapa, ufo):
+    """
+    Se toma la fecha del crimen y se busca si ya existe en el arbol
+    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
+    y se actualiza el indice de tipos de crimenes.
+
+    Si no se encuentra creado un nodo para esa fecha en el arbol
+    se crea y se actualiza el indice de tipos de crimenes
+    """
+    ufolongitud = ufo['longitude']
+    entry = om.get(mapa, ufolongitud)
+    if entry is None:
+        longitudentry = newlongitude(ufolongitud)
+        om.put(mapa, ufolongitud, longitudentry)
+    else:
+        longitudentry = me.getValue(entry)
+
+    lt.addLast(longitudentry['ufos'], ufo)
+
 # Funciones para creacion de datos
 
 def newCity(city):
@@ -180,6 +245,40 @@ def newTime(time):
     entry['time'] = time
     entry['ufos'] = lt.newList('ARRAY_LIST')
     
+    return entry
+
+def newDate(date):
+    """
+    Crea una entrada en el indice por fechas, es decir en el arbol
+    binario.
+    """
+    entry = {'date': None, 'ufos': None, 'size':0}
+    entry['date'] = date
+    entry['ufos'] = lt.newList('ARRAY_LIST')
+    
+    return entry
+
+def newlatitude(latitud):
+    """
+    Crea una entrada en el indice por fechas, es decir en el arbol
+    binario.
+    """
+    entry = {'latitude': None, 'longitude':None,'ufos': None, 'size':0}
+    entry['latitude'] = latitud
+    entry['longitude'] = om.newMap(omaptype='BST',
+                                  comparefunction=compareFloat)
+    entry['ufos'] = lt.newList('ARRAY_LIST')
+    
+    return entry
+
+def newlongitude(longitud):
+    """
+    Crea una entrada en el indice por fechas, es decir en el arbol
+    binario.
+    """
+    entry = {'longitude': None,'ufos': None}
+    entry['longitude'] = longitud
+    entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
 
 # Funciones de consulta
@@ -250,8 +349,6 @@ def getUFOByCity(catalog, city):
         value = me.getValue(entry)
         ltUfos = value['ufos']
         size = value['size']
-        mer.sort(ltUfos, cmpDate)
-
         return ltUfos, size
     else:
         return None
@@ -272,7 +369,6 @@ def getUFOTopDuration(catalog):
               'count': size}
         lt.addLast(lista, info)
 
-    mer.sort(lista, cmpDuration)
     five = getFirst(lista, 5)
     return five, lt.size(keys)
 
@@ -292,8 +388,8 @@ def getUFOinTime(catalog, inf, sup):
     values = om.values(catalog['timeIndex'], inf, sup)
     ltUfos = lt.newList('ARRAY_LIST')
     for value in lt.iterator(values):
-        for Ufo in lt.iterator(value['ufos']):
-            lt.addLast(ltUfos, Ufo)
+        for ufo in lt.iterator(value['ufos']):
+            lt.addLast(ltUfos, ufo)
     return ltUfos
 
 def getTopTime(catalog):
@@ -308,10 +404,9 @@ def getTopTime(catalog):
         info = {'time': value['time'],
                 'count': value['size']}
         lt.addLast(ltUfos, info)
-    return ltUfos
+    return ltUfos, size
 
 # Funciones utilizadas para comparar elementos dentro de una lista
-
 
 def compareDates(date1, date2):
     """
@@ -372,3 +467,21 @@ def cmpDate (ufo1, ufo2):
 
 
 # Funciones de ordenamiento
+
+def SortData(catalog):
+    cityIndex = om.valueSet(catalog['cityIndex'])
+    durationIndex = om.valueSet(catalog['durationIndex'])
+    timeIndex = om.valueSet(catalog['timeIndex'])
+    dateIndex = om.valueSet(catalog['timeIndex'])
+
+    for city in lt.iterator(cityIndex):
+        mer.sort(city['ufos'], cmpDate)
+    
+    for duration in lt.iterator(durationIndex):
+        mer.sort(duration['ufos'], cmpDate)
+        
+    for time in lt.iterator(timeIndex):
+        mer.sort(time['ufos'], cmpDate)
+
+    for date in lt.iterator(dateIndex):
+        mer.sort(date['ufos'], cmpDate)

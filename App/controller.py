@@ -24,7 +24,6 @@ import config as cf
 import model
 import csv
 
-
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
@@ -43,6 +42,7 @@ def loadData(catalog):
     estructura de datos.
     """
     loadUfos(catalog)
+    SortData(catalog)
 
 def loadUfos(catalog):
     """
@@ -55,7 +55,8 @@ def loadUfos(catalog):
         model.addUFO(catalog, ufo)
 
 # Funciones de ordenamiento
-
+def SortData(catalog):
+    model.SortData(catalog)
 # Funciones de consulta sobre el catálogo
 
 def UfosSize(catalog):

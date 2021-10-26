@@ -105,15 +105,17 @@ def PrintReq1(cityname, topcities, cityinfo):
         print('The UFO sightings in the city are:')
         printUfosTable(cityinfo[0])
 
+def PrintReq2 ():
+    pass
 
 def PrintReq3(InRange, inf, sup, top5):
     print("="*15, " Req No. 3 Inputs ", "="*15)
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 3 Answer ", "="*15)
-    print("There are", lt.size(InRange), "sightings between:", inf, "and", sup)
+    print("There are", top5[1], "different UFO sightings times [HH:MM:SS]")
     print("The 5 latest times for UFO sightings are:")
-    PrintTopTime(top5)
-
+    PrintTopTime(top5[0])
+    print("There are", lt.size(InRange), "sightings between:", inf, "and", sup)
     if lt.size(InRange) > 6:
         first = controller.getFirst(InRange, 3)
         last = controller.getLast(InRange, 3)
@@ -124,6 +126,14 @@ def PrintReq3(InRange, inf, sup, top5):
     else:
         print('The UFO sightings in this time are:')
         printUfosTable(InRange)
+
+def PrintReq4 ():
+    pass
+
+def PrintReq5 ():
+    pass
+
+
 """
 Menu principal
 """
@@ -146,6 +156,12 @@ while True:
         print('\nAltura del arbol de timeIndex:', controller.indexHeight(catalog,'timeIndex'))
         print('Elementos en el arbol de timeIndex:',controller.indexSize(catalog, 'timeIndex'))
 
+        print('\nAltura del arbol de dateIndex:', controller.indexHeight(catalog,'dateIndex'))
+        print('Elementos en el arbol de dateIndex:',controller.indexSize(catalog, 'dateIndex'))
+
+        print('\nAltura del arbol de latitudeIndex:', controller.indexHeight(catalog,'latitudeIndex'))
+        print('Elementos en el arbol de latitudeIndex:',controller.indexSize(catalog, 'latitudeIndex'))
+
     elif int(inputs[0]) == 2: #Req 1
         cityname = input('Ingrese la ciudad: ')
         cityinfo = controller.getUFOByCity(catalog, cityname.lower())
@@ -155,9 +171,8 @@ while True:
             PrintReq1(cityname, topcities, cityinfo)
         else:
             print("La ciudad ingresada no tiene avistamientos de UFO\n")
-        
 
-    elif int(inputs[0]) == 3:
+    elif int(inputs[0]) == 3: #Req 2
         minimo = float(input('Ingrese el valor minimo: '))
         maximo = float(input('Ingrese el valor maximo: '))
         duration = controller.getUFOTopDuration(catalog)
@@ -166,7 +181,6 @@ while True:
         dur = controller.getUFOByDuration(catalog, minimo, maximo)
         for x in lt.iterator(dur):
             print(x)
-
         pass
 
     elif int(inputs[0]) == 4: #Req 3
@@ -178,7 +192,14 @@ while True:
 
         InRange = controller.getUFOinTime(catalog, inf, sup)    
         top5 = controller.getTopTime(catalog)
-        PrintReq3(InRange, inf, sup, top5)    
+        PrintReq3(InRange, inf, sup, top5)
+    
+    elif int(inputs[0]) == 5: #Req 4
+        pass
+    
+    elif int(inputs[0]) == 6: #Req 5
+        pass
+
     else:
         sys.exit(0)
 sys.exit(0)
