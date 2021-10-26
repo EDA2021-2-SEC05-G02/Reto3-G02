@@ -29,6 +29,7 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import orderedmap as om
 import prettytable
 from prettytable import PrettyTable
+import datetime
 assert cf
 
 
@@ -61,6 +62,13 @@ def PrintTopCities(info):
         x.add_row([ i["city"], i["count"]])
     print(x)
 
+def PrintTopTimes (info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["Time", "Count"]
+    for i in lt.iterator(info):
+        x.add_row([ i["time"], i["count"]])
+    print(x)
+
 def printUfosTable(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Datetime", "City", "State", "Country", "Shape", "Duration (seconds)"]
@@ -74,7 +82,7 @@ def PrintReq1(cityname, topcities, cityinfo):
     print("="*15, " Req No. 1 Inputs ", "="*15)
     print("UFO Sightings in the city of:", cityname,"\n")
     print("="*15, " Req No. 1 Answer ", "="*15)
-    print("There are", topcities[1], "defferent cities with UFO sightings...")
+    print("There are", topcities[1], "different cities with UFO sightings...")
     print("The TOP 5 cities with the most UFO sightings are:")
     PrintTopCities(topcities[0])
     print("\nThere are",cityinfo[1],"sightings at the:", cityname,"city")
@@ -90,6 +98,25 @@ def PrintReq1(cityname, topcities, cityinfo):
         print('The UFO sightings in the city are:')
         printUfosTable(cityinfo[0])
 
+
+def PrintReq3(InRange, inf, sup, top5):
+    print("="*15, " Req No. 3 Inputs ", "="*15)
+    print("UFO Sightings between:", inf, "and", sup ,"\n")
+    print("="*15, " Req No. 3 Answer ", "="*15)
+    print("There are", lt.size(InRange), "sightings between:", inf, "and", sup)
+    print("The 5 latest times for UFO sightings are:")
+    PrintTopTimes(top5)
+
+    if lt.size(InRange) > 6:
+        first = controller.getFirst(InRange, 3)
+        last = controller.getLast(InRange, 3)
+        print('The first 3 UFO sightings in this time are:')
+        printUfosTable(first)
+        print('\nThe last 3 UFO sightings in this time are:')
+        printUfosTable(last)
+    else:
+        print('The UFO sightings in this time are:')
+        printUfosTable(InRange)
 """
 Menu principal
 """
@@ -102,8 +129,15 @@ while True:
         print("Cargando información de los archivos ....")
         controller.loadData(catalog)
         print('Avistamientos cargadas:', controller.UfosSize(catalog))
-        print('Altura del arbol de cityIndex:', controller.indexHeight(catalog,'cityIndex'))
+
+        print('\nAltura del arbol de cityIndex:', controller.indexHeight(catalog,'cityIndex'))
         print('Elementos en el arbol de cityIndex:',controller.indexSize(catalog, 'cityIndex'))
+
+        print('\nAltura del arbol de durationIndex:', controller.indexHeight(catalog,'durationIndex'))
+        print('Elementos en el arbol de durationIndex:',controller.indexSize(catalog, 'durationIndex'))
+
+        print('\nAltura del arbol de timeIndex:', controller.indexHeight(catalog,'timeIndex'))
+        print('Elementos en el arbol de timeIndex:',controller.indexSize(catalog, 'timeIndex'))
 
     elif int(inputs[0]) == 2: #Req 1
         cityname = input('Ingrese la ciudad: ')
@@ -116,13 +150,21 @@ while True:
             print("La ciudad ingresada no tiene avistamientos de UFO\n")
         
 
-    elif int(inputs[0]) == 3:
+    elif int(inputs[0]) == 3: #Req 2
         duration = controller.getUFOTopDuration(catalog)
         print(duration)
-
         pass
-        
-        
+
+    elif int(inputs[0]) == 4: #Req 3
+        inicial = input("Ingresa el tiempo inicial (HH:MM): ")
+        final = input("Ingresa el tiempo final (HH:MM): ")
+
+        inf = datetime.datetime.strptime(inicial, '%H:%M').time()
+        sup = datetime.datetime.strptime(final, '%H:%M').time()
+
+        InRange = controller.getUFOinTime(catalog, inf, sup)    
+        top5 = controller.getTopTime(catalog)
+        PrintReq3(InRange, inf, sup, top5)    
     else:
         sys.exit(0)
 sys.exit(0)

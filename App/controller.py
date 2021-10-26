@@ -104,3 +104,15 @@ def getUFOByDuration(catalog, minimo, maximo):
     Req 2
     """
     return model.getUFOByDuration(catalog, minimo, maximo)
+
+def getUFOinTime(catalog, inf, sup):
+    """
+    Req 3
+    """
+    return model.getUFOinTime(catalog, inf, sup) 
+
+def getTopTime(catalog):
+    """
+    Req 3
+    """
+    return model.getTopTime(catalog)
