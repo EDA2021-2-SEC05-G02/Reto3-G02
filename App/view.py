@@ -31,6 +31,7 @@ import prettytable
 from prettytable import PrettyTable
 import datetime
 assert cf
+import time as tm
 
 
 """
@@ -161,6 +162,7 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        start = tm.process_time()
         print("Inicializando Catálogo ....")
         catalog = controller.initCatalog()
         print("Cargando información de los archivos ....")
@@ -182,7 +184,12 @@ while True:
         print('\nAltura del arbol de latitudeIndex:', controller.indexHeight(catalog,'latitudeIndex'))
         print('Elementos en el arbol de latitudeIndex:',controller.indexSize(catalog, 'latitudeIndex'))
 
+        end = tm.process_time()
+        total_time = (end - start)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+
     elif int(inputs[0]) == 2: #Req 1
+        start = tm.process_time()
         cityname = input('Ingrese la ciudad: ')
         cityinfo = controller.getUFOByCity(catalog, cityname.lower())
 
@@ -192,15 +199,24 @@ while True:
         else:
             print("La ciudad ingresada no tiene avistamientos de UFO\n")
 
+        end = tm.process_time()
+        total_time = (end - start)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+
     elif int(inputs[0]) == 3: #Req 2
+        start = tm.process_time()
         minimo = float(input('Ingrese el valor minimo: '))
         maximo = float(input('Ingrese el valor maximo: '))
         duration = controller.getUFOTopDuration(catalog)
         dur = controller.getUFOByDuration(catalog, minimo, maximo)
         PrintReq2(dur, minimo, maximo, duration)
+        end = tm.process_time()
+        total_time = (end - start)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
 
     elif int(inputs[0]) == 4: #Req 3
+        start = tm.process_time()
         inicial = input("Ingresa el tiempo inicial (HH:MM): ")
         final = input("Ingresa el tiempo final (HH:MM): ")
 
@@ -210,6 +226,9 @@ while True:
         InRange = controller.getUFOinTime(catalog, inf, sup)    
         top5 = controller.getTopTime(catalog)
         PrintReq3(InRange, inf, sup, top5)
+        end = tm.process_time()
+        total_time = (end - start)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     
     elif int(inputs[0]) == 5: #Req 4
         pass
