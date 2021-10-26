@@ -262,14 +262,27 @@ def getUFOTopDuration(catalog):
     Req 2
     """
     lista = lt.newList('ARRAY_LIST')
-    dur = om.keySet(catalog['durationIndex'])
-    for key in lt.iterator(dur):
+    keys = om.keySet(catalog['durationIndex'])
+    size = 0
+    for key in lt.iterator(keys):
         entry = om.get(catalog['durationIndex'], key)
-        duration = me.getValue(entry)['ufos']
-        lt.addLast(lista, {'duration': key})
+        value = me.getValue(entry)['ufos']
+        size = value['size']
+        info={'duration': key,
+              'count': size}
+        lt.addLast(lista, info)
+
     mer.sort(lista, cmpDuration)
     five = getFirst(lista, 5)
-    return dur
+    return five, lt.size(keys)
+
+def getUFOByDuration(catalog, minimo, maximo):
+    """
+    Req 2
+    """
+    # Organizar valores por fechas
+    duration = om.values(catalog['durationIndex'], minimo, maximo)
+    return duration
 
 
 def getUFOinTime(catalog, inf, sup):
@@ -284,6 +297,9 @@ def getUFOinTime(catalog, inf, sup):
     return ltUfos
 
 def getTopTime(catalog):
+    """
+    Req 3
+    """
     mapa = catalog['timeIndex']
     size = om.size(mapa)
     top5 = om.values(mapa,om.select(mapa,size-5),om.maxKey(mapa))

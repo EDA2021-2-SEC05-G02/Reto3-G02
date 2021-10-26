@@ -62,7 +62,14 @@ def PrintTopCities(info):
         x.add_row([ i["city"], i["count"]])
     print(x)
 
-def PrintTopTimes (info):
+def PrintTopDuration(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["Duration", "Count"]
+    for i in lt.iterator(info):
+        x.add_row([ i["duration"], i["count"]])
+    print(x)
+
+def PrintTopTime(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Time", "Count"]
     for i in lt.iterator(info):
@@ -105,7 +112,7 @@ def PrintReq3(InRange, inf, sup, top5):
     print("="*15, " Req No. 3 Answer ", "="*15)
     print("There are", lt.size(InRange), "sightings between:", inf, "and", sup)
     print("The 5 latest times for UFO sightings are:")
-    PrintTopTimes(top5)
+    PrintTopTime(top5)
 
     if lt.size(InRange) > 6:
         first = controller.getFirst(InRange, 3)
@@ -150,9 +157,16 @@ while True:
             print("La ciudad ingresada no tiene avistamientos de UFO\n")
         
 
-    elif int(inputs[0]) == 3: #Req 2
+    elif int(inputs[0]) == 3:
+        minimo = float(input('Ingrese el valor minimo: '))
+        maximo = float(input('Ingrese el valor maximo: '))
         duration = controller.getUFOTopDuration(catalog)
-        print(duration)
+        PrintTopDuration(duration[0])
+        # Arreglar el view
+        dur = controller.getUFOByDuration(catalog, minimo, maximo)
+        for x in lt.iterator(dur):
+            print(x)
+
         pass
 
     elif int(inputs[0]) == 4: #Req 3
