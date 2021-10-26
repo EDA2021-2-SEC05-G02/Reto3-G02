@@ -468,6 +468,12 @@ def cmpDuration(ufo1, ufo2):
 def cmpDate (ufo1, ufo2):
     return ufo1['datetime'] < ufo2['datetime']
 
+def cmpCountry (ufo1, ufo2):
+    return str(ufo1['country']) < str(ufo2['country'])
+
+def cmpCity(ufo1, ufo2):
+    return str(ufo1['city']) < str(ufo2['city'])
+
 
 # Funciones de ordenamiento
 
@@ -479,6 +485,10 @@ def SortData(catalog):
 
     for city in lt.iterator(cityIndex):
         mer.sort(city['ufos'], cmpDate)
+
+    for duration in lt.iterator(durationIndex):
+        mer.sort(duration['ufos'], cmpCountry)
+        mer.sort(duration['ufos'], cmpCity)
         
     for time in lt.iterator(timeIndex):
         mer.sort(time['ufos'], cmpDate)
