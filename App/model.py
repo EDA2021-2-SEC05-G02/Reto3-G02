@@ -97,12 +97,12 @@ def addUFO(catalog, ufo):
 
 def updateCityIndex (mapa, ufo):
     """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+    Se toma la ciudad del avistamiento y se busca si ya existe 
+    en el arbol dicha ciudad. 
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
+    -Si se encuentra, se adiciona a su lista de avistamientos.
+    -Si no se encuentra, crea un nodo para esa ciudad en el
+     arbol.
     """
     ufocity = ufo['city'].lower()
     entry = om.get(mapa, ufocity)
@@ -117,12 +117,12 @@ def updateCityIndex (mapa, ufo):
 
 def updateDurationIndex (mapa, ufo):
     """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+    Se toma la duracion del avistamiento y se busca si ya existe 
+    en el arbol dicha duracion. 
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
+    -Si se encuentra, se adiciona a su lista de avistamientos.
+    -Si no se encuentra, crea un nodo para esa duracion en el
+     arbol.
     """
     ufoduration = ufo['duration (seconds)']
     entry = om.get(mapa, ufoduration)
@@ -137,12 +137,12 @@ def updateDurationIndex (mapa, ufo):
 
 def updateTimeIndex (mapa, ufo):
     """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+    Se toma la hora [HH:MM] del avistamiento y se busca si ya 
+    existe en el arbol dicha hora. 
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
+    -Si se encuentra, se adiciona a su lista de avistamientos.
+    -Si no se encuentra, crea un nodo para esa hora en el
+     arbol.
     """
     ufotime = ufo['datetime'].time()
     entry = om.get(mapa, ufotime)
@@ -157,12 +157,12 @@ def updateTimeIndex (mapa, ufo):
 
 def updateDateIndex (mapa, ufo):
     """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+    Se toma la fecha [AAAA-MM-DD] del avistamiento y se busca 
+    si ya existe en el arbol dicha fecha. 
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
+    -Si se encuentra, se adiciona a su lista de avistamientos.
+    -Si no se encuentra, crea un nodo para esa fecha en el
+     arbol.
     """
     ufodate = ufo['datetime'].date()
     entry = om.get(mapa, ufodate)
@@ -177,12 +177,13 @@ def updateDateIndex (mapa, ufo):
 
 def updatelatitudeIndex (mapa, ufo):
     """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+    Se toma la latitud del avistamiento y se busca si ya 
+    existe en el arbol dicha latitud. 
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
+    -Si se encuentra, se adiciona a su lista de avistamientos y 
+     se actualiza el indice de longitud.
+    -Si no se encuentra, crea un nodo para esa latitud en el
+     arbol.
     """
     ufolatitud = ufo['latitude']
     entry = om.get(mapa, ufolatitud)
@@ -198,12 +199,12 @@ def updatelatitudeIndex (mapa, ufo):
 
 def updatelongitudeIndex (mapa, ufo):
     """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+    Se toma la longitud del avistamiento y se busca si ya 
+    existe en el arbol dicha longitud. 
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
+    -Si se encuentra, se adiciona a su lista de avistamientos.
+    -Si no se encuentra, crea un nodo para esa longitud en el
+     arbol.
     """
     ufolongitud = ufo['longitude']
     entry = om.get(mapa, ufolongitud)
@@ -214,12 +215,13 @@ def updatelongitudeIndex (mapa, ufo):
         longitudentry = me.getValue(entry)
 
     lt.addLast(longitudentry['ufos'], ufo)
+    longitudentry['size'] += 1
 
 # Funciones para creacion de datos
 
 def newCity(city):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por ciudad, es decir en el arbol
     binario.
     """
     entry = {'city': None, 'ufos': None, 'size':0}
@@ -229,7 +231,7 @@ def newCity(city):
     
 def newDuration(duration):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por duracion, es decir en el arbol
     binario.
     """
     entry = {'duration': None, 'ufos': None, 'size':0}
@@ -239,29 +241,27 @@ def newDuration(duration):
 
 def newTime(time):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por hora, es decir en el arbol
     binario.
     """
     entry = {'time': None, 'ufos': None, 'size':0}
     entry['time'] = time
     entry['ufos'] = lt.newList('ARRAY_LIST')
-    
     return entry
 
 def newDate(date):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por fecha, es decir en el arbol
     binario.
     """
     entry = {'date': None, 'ufos': None, 'size':0}
     entry['date'] = date
     entry['ufos'] = lt.newList('ARRAY_LIST')
-    
     return entry
 
 def newlatitude(latitud):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por latitud, es decir en el arbol
     binario.
     """
     entry = {'latitude': None, 'longitude':None,'ufos': None, 'size':0}
@@ -269,15 +269,14 @@ def newlatitude(latitud):
     entry['longitude'] = om.newMap(omaptype='BST',
                                   comparefunction=compareFloat)
     entry['ufos'] = lt.newList('ARRAY_LIST')
-    
     return entry
 
 def newlongitude(longitud):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por longitud, es decir en el arbol
     binario.
     """
-    entry = {'longitude': None,'ufos': None}
+    entry = {'longitude': None,'ufos': None, 'size':0}
     entry['longitude'] = longitud
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
@@ -313,17 +312,15 @@ def indexHeight(catalog, indice):
 
 def indexSize(catalog, indice):
     """
-    Numero de elementos en el indice
+    Número de elementos en el indice
     """
     return om.size(catalog[indice])
-
 
 #Requerimientos
 
 def getUFOTopCity(catalog):
     """
-    Req 1:
-    Retorna el Top 5 ciudades con mas avistamientos
+    Req 1: Retorna el Top 5 ciudades con mas avistamientos
     """
     lista = lt.newList('ARRAY_LIST')
     keys = om.keySet(catalog['cityIndex']) 
@@ -331,9 +328,8 @@ def getUFOTopCity(catalog):
     for key in lt.iterator(keys):
         entry = om.get(catalog['cityIndex'], key)
         value = me.getValue(entry)
-        size = value['size']
         info={'city': key,
-              'count': size}
+              'count': value['size']}
         lt.addLast(lista, info)
 
     mer.sort(lista, cmpByCount)
@@ -344,20 +340,29 @@ def getUFOTopCity(catalog):
 def getUFOByCity(catalog, city):
     """
     Req 1:
+    Busca la ciudad que ingresa por parametro en el cityIndex (ciudad, lista Ufos)
+
+    param:
+        -catalog: Catalgo de Ufos
+        -city: Nombre de la ciudad a consultar
+    return:
+        -None: Si no se encontro el la ciudad
+        -tuple:
+            -List: Lista de avistamientos en la ciudad
+            -Int: El numero total de avistamientos en la ciudad
     """
     entry = om.get(catalog['cityIndex'], city)
-    if entry:
-        value = me.getValue(entry)
-        ltUfos = value['ufos']
-        size = value['size']
-        return ltUfos, size
-    else:
+    if not entry:
         return None
-
+    value = me.getValue(entry)
+    ltUfos = value['ufos']
+    size = value['size']
+    return ltUfos, size
+    
 
 def getUFOTopDuration(catalog):
     """
-    Req 2
+    Req 2 Retorna el Top 5 duraciones mas largas
     """
     mapa = catalog['durationIndex']
     size = om.size(mapa)
@@ -371,7 +376,19 @@ def getUFOTopDuration(catalog):
 
 def getUFOByDuration(catalog, minimo, maximo):
     """
-    Req 2
+    Req 2:
+    Busca la los avistamientos en el rango dado, con el metodo values(),
+    Agrega a una lista los avistamientos que se encuentran en el rango
+    de duracion dado.
+
+    param:
+        -catalog: Catalgo de Ufos
+        -minimo: Duración minima
+        -maximo: Duración maxima
+    return:
+        -tuple:
+            -List: Lista de avistamientos en el rango de duracion dado
+            -Int: El numero total de avistamientos en el rango de duracion dado
     """
     # Organizar valores por fechas
     ltUfos = lt.newList('ARRAY_LIST')
@@ -381,23 +398,32 @@ def getUFOByDuration(catalog, minimo, maximo):
             lt.addLast(ltUfos, ufo)
     return ltUfos, lt.size(ltUfos)
 
-    
-
-
 def getUFOinTime(catalog, inf, sup):
     """
-    Req 3
+    Req 3:
+    Busca la los avistamientos en el rango dado, con el metodo values(),
+    Agrega a una lista los avistamientos que se encuentran en el rango
+    de tiempo dado.
+
+    param:
+        -catalog: Catalgo de Ufos
+        -inf: Hora [HH:MM] minima
+        -sup: Hora [HH:MM] maxima
+    return:
+        -tuple:
+            -List: Lista de avistamientos en el rango de tiempo dado
+            -Int: El numero total de avistamientos en el rango de tiempo dado
     """
     values = om.values(catalog['timeIndex'], inf, sup)
     ltUfos = lt.newList('ARRAY_LIST')
     for value in lt.iterator(values):
         for ufo in lt.iterator(value['ufos']):
             lt.addLast(ltUfos, ufo)
-    return ltUfos
+    return ltUfos, lt.size(ltUfos)
 
 def getTopTime(catalog):
     """
-    Req 3
+    Req 3: Retorna el Top 5 horas [HH:MM] mas tardias
     """
     mapa = catalog['timeIndex']
     size = om.size(mapa)
@@ -458,7 +484,6 @@ def compareTime (time1, time2):
     else:
         return -1
 
-
 def cmpByCount (city1, city2):
     return city1['count'] > city2['count']
 
@@ -469,13 +494,10 @@ def cmpDate (ufo1, ufo2):
     return ufo1['datetime'] < ufo2['datetime']
 
 def cmpCountry (ufo1, ufo2):
-    return str(ufo1['country']) < str(ufo2['country'])
+    return ufo1['country'] < ufo2['country']
 
 def cmpCity (ufo1, ufo2):
-    return str(ufo1['city']) < str(ufo2['city'])
-
-
-
+    return ufo1['city'] < ufo2['city']
 
 # Funciones de ordenamiento
 
@@ -491,7 +513,6 @@ def SortData(catalog):
     for duration in lt.iterator(durationIndex):
         mer.sort(duration['ufos'], cmpCity)
         mer.sort(duration['ufos'], cmpCountry)
-        
         
     for time in lt.iterator(timeIndex):
         mer.sort(time['ufos'], cmpDate)

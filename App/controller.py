@@ -49,7 +49,7 @@ def loadUfos(catalog):
     Carga las obras del archivo. Por cada obra se indica al
     modelo que debe adicionarla al catalogo.
     """
-    Ufosfile = cf.data_dir + 'UFOS-utf8-small.csv'
+    Ufosfile = cf.data_dir + 'UFOS-utf8-large.csv'
     input_file = csv.DictReader(open(Ufosfile, encoding='utf-8'))
     for ufo in input_file:
         model.addUFO(catalog, ufo)
@@ -60,12 +60,21 @@ def SortData(catalog):
 # Funciones de consulta sobre el catálogo
 
 def UfosSize(catalog):
+    """
+    Retorna el número de avistamientos totales
+    """
     return model.UfosSize(catalog)
 
 def indexHeight(catalog, indice):
+    """
+    Retorna la altura del arbol
+    """
     return model.indexHeight(catalog, indice)
 
 def indexSize(catalog, indice):
+    """
+    Retorna el número de elementos en el indice
+    """
     return model.indexSize(catalog, indice)
 
 def getLast(lista, num):
