@@ -133,6 +133,7 @@ def updateDurationIndex (mapa, ufo):
         durationentry = me.getValue(entry)
 
     lt.addLast(durationentry['ufos'], ufo)
+    durationentry['size']+=1
 
 def updateTimeIndex (mapa, ufo):
     """
@@ -231,7 +232,7 @@ def newDuration(duration):
     Crea una entrada en el indice por fechas, es decir en el arbol
     binario.
     """
-    entry = {'duration': None, 'ufos': None}
+    entry = {'duration': None, 'ufos': None, 'size':0}
     entry['duration'] = duration
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
@@ -358,27 +359,29 @@ def getUFOTopDuration(catalog):
     """
     Req 2
     """
-    lista = lt.newList('ARRAY_LIST')
-    keys = om.keySet(catalog['durationIndex'])
-    size = 0
-    for key in lt.iterator(keys):
-        entry = om.get(catalog['durationIndex'], key)
-        value = me.getValue(entry)['ufos']
-        size = value['size']
-        info={'duration': key,
-              'count': size}
-        lt.addLast(lista, info)
-
-    five = getFirst(lista, 5)
-    return five, lt.size(keys)
+    mapa = catalog['durationIndex']
+    size = om.size(mapa)
+    top5 = om.values(mapa,om.select(mapa,size-5),om.maxKey(mapa))
+    ltUfos = lt.newList('ARRAY_LIST')
+    for value in lt.iterator(top5):
+        info = {'duration': value['duration'],
+                'count': value['size']}
+        lt.addLast(ltUfos, info)
+    return ltUfos, size
 
 def getUFOByDuration(catalog, minimo, maximo):
     """
     Req 2
     """
     # Organizar valores por fechas
-    duration = om.values(catalog['durationIndex'], minimo, maximo)
-    return duration
+    ltUfos = lt.newList('ARRAY_LIST')
+    values = om.values(catalog['durationIndex'], minimo, maximo)
+    for value in lt.iterator(values):
+        for ufo in lt.iterator(value['ufos']):
+            lt.addLast(ltUfos, ufo)
+    return ltUfos, lt.size(ltUfos)
+
+    
 
 
 def getUFOinTime(catalog, inf, sup):
