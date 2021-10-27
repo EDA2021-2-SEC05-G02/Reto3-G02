@@ -209,7 +209,7 @@ def PrintReq5 (InRange, infLatitud, supLatitud, infLongitud, supLongitud):
         printLastTable(first)
         print('\nThe last 5 UFO sightings in this time are:')
         printLastTable(last)
-    else:
+    elif InRange[1] != 0:
         print('The UFO sightings in this time are:')
         printLastTable(InRange[0])
 
@@ -342,11 +342,12 @@ while True:
 
         end = tm.process_time()
         total_time = (end - start)
-
+        
         PrintReq5(InRange, minLatitud, maxLatitud, maxLongitud, minLongitud)
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
         
-        
+        if InRange[1] == 0:
+            continue 
         print("(Bono) Visualizar los avistamientos de una zona geográfica")
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
 
