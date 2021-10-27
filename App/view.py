@@ -52,7 +52,7 @@ def printMenu():
     print("5- (Req 4) Contar los avistamientos en rango de fechas") 
     print("6- (Req 5) Contar los avistamientos de una Zona Geográfica")       
     #print("6- (Bono) Visualizar los avistamientos de una zona geográfica")
-    print("0- Salir")
+    print("0- Salir de la aplicacion")
 
 catalog = None
 
@@ -341,38 +341,25 @@ while True:
 
         PrintReq5(InRange, minLatitud, maxLatitud, maxLongitud, minLongitud)
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
-
-    elif int(inputs[0]) == 7: #req 6 Adelanto
-        infLatitud = round(float(input("Ingresa la latitud minima: ")),2)
-        supLatitud = round(float(input("Ingresa la latitud maxima: ")),2)
-        infLongitud = round(float(input("Ingresa la longitud minima: ")),2)
-        supLongitud = round(float(input("Ingresa la longitud maxima: ")),2)
-
-        minLatitud = min(infLatitud, supLatitud)
-        maxLatitud = max(infLatitud, supLatitud)
-        minLongitud = min(infLongitud, supLongitud)
-        maxLongitud = max(infLongitud, supLongitud)
-
-        start = tm.process_time()
         
-        # Arreglar Coordenadas
-        InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
-        first = controller.getFirst(InRange[0], 5)
-        print6Table(first)
+        print("(Bono) Visualizar los avistamientos de una zona geográfica")
+        bono = input('¿Desea ejecutar el bono? (si/no): ').lower()
+        if bono == 'si':
+            start = tm.process_time()
 
-        map = folium.Map(location = [infLatitud, supLongitud],
+            map = folium.Map(location = [infLatitud, supLongitud],
                  min_lot=infLongitud,
                  max_lot=supLongitud,
                  min_lat=infLatitud,
                  max_lat=supLatitud,
                  zoom_start = 10)
-        map.save('map.html')
+            map.save('map.html')
 
-        
+            print('\nPuede abrir el map.html en cualquier navegador para visualizar el mapa creado')
 
-        end = tm.process_time()
-        total_time = (end - start)
-        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+            end = tm.process_time()
+            total_time = (end - start)
+            print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
     else:
         sys.exit(0)
