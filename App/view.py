@@ -93,6 +93,15 @@ def printUfosTable(info):
                     i["shape"], i["duration (seconds)"]])
     print(x)
 
+def printLastTable(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["Datetime", "City", "State", "Country", "Shape", "Duration (seconds)", 'Latitude', 'Longitude']
+    for i in lt.iterator(info):
+        x.add_row([ i["datetime"], i["city"], 
+                    i["state"], i["country"], 
+                    i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
+    print(x)
+
 def PrintReq1(cityname, topcities, cityinfo):
     print("="*15, " Req No. 1 Inputs ", "="*15)
     print("UFO Sightings in the city of:", cityname,"\n")
@@ -171,8 +180,23 @@ def PrintReq4(InRange, inf, sup, top5):
         print('The UFO sightings in this time are:')
         printUfosTable(InRange[0])
 
-def PrintReq5 ():
-    pass
+def PrintReq5 (InRange, infLatitud, supLatitud, infLongitud, supLongitud):
+    print("="*15, " Req No. 4 Inputs ", "="*15)
+    print("UFO Sightings between latitude range:", infLatitud, "and", supLatitud)
+    print("plus longitude range:", infLongitud, "and", supLongitud ,"\n")
+    print("="*15, " Req No. 4 Answer ", "="*15)
+    print("There are", InRange[1], "different UFOS sightings in the current area")
+    if InRange[1] > 10:
+        first = controller.getFirst(InRange[0], 5)
+        last = controller.getLast(InRange[0], 5)
+        print('The first 5 UFO sightings in this time are:')
+        printLastTable(first)
+        print('\nThe last 5 UFO sightings in this time are:')
+        printLastTable(last)
+    else:
+        print('The UFO sightings in this time are:')
+        printLastTable(InRange[0])
+    
 
 """
 Menu principal
@@ -298,6 +322,7 @@ while True:
         maxLongitud = max(infLongitud, supLongitud)
         
         InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
+        PrintReq5(InRange, minLatitud, maxLatitud, maxLongitud, minLongitud)
 
     else:
         sys.exit(0)
