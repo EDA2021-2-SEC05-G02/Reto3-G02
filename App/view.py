@@ -355,6 +355,7 @@ while True:
 
         start = tm.process_time()
         
+        # Arreglar Coordenadas
         InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
         first = controller.getFirst(InRange[0], 5)
         print6Table(first)
