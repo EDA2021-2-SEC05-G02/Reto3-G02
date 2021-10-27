@@ -470,6 +470,22 @@ def getTopDate(catalog):
     return ltUfos, size
 
 def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
+    """
+    Busca la los avistamientos en el rango dado, con el metodo values(),
+    Agrega a una lista los avistamientos que se encuentran en el rango
+    de latitud y longitud dado.
+
+    param:
+        -catalog: Catalgo de Ufos
+        -minLatitud: Latitud minima
+        -maxLatitud: Latitud maxima
+        -minLongitud: Longitud minima
+        -maxLongitud: Longitud maxima
+    return:
+        -tuple:
+            -List: Lista de avistamientos en el rango de latitud y longitud dado
+            -Int: El numero total de avistamientos en el rango de latitud y longitud dado
+    """
     mapa = catalog['latitudeIndex']
     ltUfos = lt.newList('ARRAY_LIST')
     rangeLatitud = om.values(mapa,minLatitud,maxLatitud)
@@ -479,7 +495,6 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
         for longitud in lt.iterator(rangeLongitud):
             for ufo in lt.iterator(longitud['ufos']):
                 lt.addLast(ltUfos, ufo)
-        
 
     return ltUfos, lt.size(ltUfos)
 
