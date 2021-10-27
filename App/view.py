@@ -51,7 +51,6 @@ def printMenu():
     print("4- (Req 3) Contar los avistamientos por Hora/Minutos del día")    
     print("5- (Req 4) Contar los avistamientos en rango de fechas") 
     print("6- (Req 5) Contar los avistamientos de una Zona Geográfica")       
-    #print("6- (Bono) Visualizar los avistamientos de una zona geográfica")
     print("0- Salir de la aplicacion")
 
 catalog = None
@@ -104,14 +103,6 @@ def printLastTable(info):
                     i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
     print(x)
 
-def print6Table(info):
-    x = PrettyTable(hrules=prettytable.ALL)
-    x.field_names = ['Latitude', 'Longitude']
-    for i in lt.iterator(info):
-        x.add_row([i["latitude"], i["longitude"]])
-    print(x)
-
-    
             
 
 def PrintReq1(cityname, topcities, cityinfo):
@@ -343,24 +334,30 @@ while True:
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
         
         print("(Bono) Visualizar los avistamientos de una zona geográfica")
-        bono = input('¿Desea ejecutar el bono? (si/no): ').lower()
+        bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
+
         if bono == 'si':
-            start = tm.process_time()
 
             map = folium.Map(location = [infLatitud, supLongitud],
-                 min_lot=infLongitud,
-                 max_lot=supLongitud,
-                 min_lat=infLatitud,
-                 max_lat=supLatitud,
-                 zoom_start = 10)
-            map.save('map.html')
+                    min_lot=infLongitud,
+                    max_lot=supLongitud,
+                    min_lat=infLatitud,
+                    max_lat=supLatitud,
+                    zoom_start = 10)
+
+            tooltip = "Click me!"
+            # Para anañadir los marcadores al mapa se puede utilizar la funcion a continuacion
+            folium.Marker(
+                [35.0844, -106.651], popup="<i>Punto 1</i>", tooltip=tooltip
+                ).add_to(map)
+            
 
             print('\nPuede abrir el map.html en cualquier navegador para visualizar el mapa creado')
 
             end = tm.process_time()
             total_time = (end - start)
             print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
-
+        
     else:
         sys.exit(0)
 sys.exit(0)
