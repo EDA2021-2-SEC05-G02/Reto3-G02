@@ -32,6 +32,8 @@ from prettytable import PrettyTable
 import datetime
 assert cf
 import time as tm
+import folium
+
 
 
 """
@@ -101,6 +103,16 @@ def printLastTable(info):
                     i["state"], i["country"], 
                     i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
     print(x)
+
+def print6Table(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ['Latitude', 'Longitude']
+    for i in lt.iterator(info):
+        x.add_row([i["latitude"], i["longitude"]])
+    print(x)
+
+    
+            
 
 def PrintReq1(cityname, topcities, cityinfo):
     print("="*15, " Req No. 1 Inputs ", "="*15)
@@ -196,7 +208,6 @@ def PrintReq5 (InRange, infLatitud, supLatitud, infLongitud, supLongitud):
     else:
         print('The UFO sightings in this time are:')
         printLastTable(InRange[0])
-    
 
 """
 Menu principal
@@ -329,6 +340,37 @@ while True:
         total_time = (end - start)
 
         PrintReq5(InRange, minLatitud, maxLatitud, maxLongitud, minLongitud)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+
+    elif int(inputs[0]) == 7: #req 6 Adelanto
+        infLatitud = round(float(input("Ingresa la latitud minima: ")),2)
+        supLatitud = round(float(input("Ingresa la latitud maxima: ")),2)
+        infLongitud = round(float(input("Ingresa la longitud minima: ")),2)
+        supLongitud = round(float(input("Ingresa la longitud maxima: ")),2)
+
+        minLatitud = min(infLatitud, supLatitud)
+        maxLatitud = max(infLatitud, supLatitud)
+        minLongitud = min(infLongitud, supLongitud)
+        maxLongitud = max(infLongitud, supLongitud)
+
+        start = tm.process_time()
+        
+        InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
+        first = controller.getFirst(InRange[0], 5)
+        print6Table(first)
+
+        map = folium.Map(location = [infLatitud, supLongitud],
+                 min_lot=infLongitud,
+                 max_lot=supLongitud,
+                 min_lat=infLatitud,
+                 max_lat=supLatitud,
+                 zoom_start = 10)
+        map.save('map.html')
+
+        
+
+        end = tm.process_time()
+        total_time = (end - start)
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
     else:
