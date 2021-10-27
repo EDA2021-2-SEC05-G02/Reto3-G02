@@ -265,7 +265,7 @@ def newlatitude(latitud):
     binario.
     """
     entry = {'latitude': None, 'longitude':None,'ufos': None, 'size':0}
-    entry['latitude'] = latitud
+    entry['latitude'] = round(latitud, 2)
     entry['longitude'] = om.newMap(omaptype='BST',
                                   comparefunction=compareFloat)
     entry['ufos'] = lt.newList('ARRAY_LIST')
@@ -277,7 +277,7 @@ def newlongitude(longitud):
     binario.
     """
     entry = {'longitude': None,'ufos': None, 'size':0}
-    entry['longitude'] = longitud
+    entry['longitude'] = round(longitud,2)
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
 
@@ -470,6 +470,7 @@ def getTopDate(catalog):
                 'count': value['size']}
         lt.addLast(ltUfos, info)
     return ltUfos, size
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
