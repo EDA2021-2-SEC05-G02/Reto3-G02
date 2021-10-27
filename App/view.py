@@ -208,6 +208,14 @@ while True:
         print('\nAltura del arbol de latitudeIndex:', controller.indexHeight(catalog,'latitudeIndex'))
         print('Elementos en el arbol de latitudeIndex:',controller.indexSize(catalog, 'latitudeIndex'))
 
+        first = controller.getFirst(catalog['Ufos'], 5)
+        last = controller.getLast(catalog['Ufos'], 5)
+        print('\nThe first 5 UFO sightings loaded:')
+        printUfosTable(first)
+        print('\nThe last 5 UFO sightings loaded:')
+        printUfosTable(last)
+
+
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
     elif int(inputs[0]) == 2: #Req 1
