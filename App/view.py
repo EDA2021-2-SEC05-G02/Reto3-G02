@@ -35,6 +35,7 @@ import time as tm
 import folium
 import webbrowser
 import pandas as pd
+import os
 
 
 
@@ -364,10 +365,11 @@ while True:
 
             map.save("Maps\map.html")
             webbrowser.open('Maps\map.html')
-            
+            os.remove('Maps\locations.csv')
             end = tm.process_time()
             total_time = (end - start)
             print("The time it took to execute the requirement (bono) was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+            
         
     else:
         sys.exit(0)
