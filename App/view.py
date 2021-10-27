@@ -47,8 +47,8 @@ def printMenu():
     print("2- (Req 1) Contar los avistamientos en una ciudad")
     print("3- (Req 2) Contar los avistamientos por duración")    
     print("4- (Req 3) Contar los avistamientos por Hora/Minutos del día")    
-    #print("5- (Req 4) Contar los avistamientos en rango de fechas") 
-    #print("5- (Req 5) Contar los avistamientos de una Zona Geográfica")       
+    print("5- (Req 4) Contar los avistamientos en rango de fechas") 
+    print("5- (Req 5) Contar los avistamientos de una Zona Geográfica")       
     #print("6- (Bono) Visualizar los avistamientos de una zona geográfica")
     print("0- Salir")
 
