@@ -359,8 +359,8 @@ while True:
             df = pd.read_csv('Maps\locations.csv')
             tooltip = "Click me!"
             df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
-                                              radius=10,Tooltip=tooltip, popup=row["City"])
-                                             .add_to(map), axis=1)
+                                              radius=10,Tooltip=tooltip, popup=folium.Popup('City: ' + row['City'] + '<br>' + 'Datetime: ' + row['Datetime'], 
+                                              min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(map), axis=1)
 
             map.save("Maps\map.html")
             webbrowser.open('Maps\map.html')
