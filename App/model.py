@@ -295,6 +295,12 @@ def getLast(lista, num):
     lista = lt.subList(lista, lt.size(lista)-(num-1), num)
     return lista
 
+def FirtsAndLast(primeros, ultimos):
+    for item in lt.iterator(ultimos):
+        lt.addLast(primeros, item)
+    return primeros
+
+
 def UfosSize(catalog):
     """
     Número de avistamientos totales

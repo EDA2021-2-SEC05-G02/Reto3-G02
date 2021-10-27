@@ -90,6 +90,8 @@ def getFirst(lista, num):
     """
     return model.getFirst(lista, num)
 
+def FirtsAndLast(primeros, ultimos):
+    return model.FirtsAndLast(primeros, ultimos)
 #Requeriminetos
 
 def getUFOTopCity(catalog):

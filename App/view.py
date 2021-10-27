@@ -130,10 +130,10 @@ def PrintReq1(cityname, topcities, cityinfo):
     if lt.size(cityinfo[0]) > 6:
         first = controller.getFirst(cityinfo[0], 3)
         last = controller.getLast(cityinfo[0], 3)
-        print('The first 3 UFO sightings in the city are:')
-        printUfosTable(first)
-        print('\nThe last 3 UFO sightings in the city are:')
-        printUfosTable(last)
+        ltUfos = controller.FirtsAndLast(first, last)
+        print('The first and last 3 UFO sightings in the city are:')
+        printUfosTable(ltUfos)
+        
     else:
         print('The UFO sightings in the city are:')
         printUfosTable(cityinfo[0])
@@ -150,10 +150,10 @@ def PrintReq2 (InRange, inf, sup, top5):
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
         last = controller.getLast(InRange[0], 3)
-        print('The first 3 UFO sightings in the duration time:')
-        printUfosTable(first)
-        print('\nThe last 3 UFO sightings in the duration time::')
-        printUfosTable(last)
+        ltUfos = controller.FirtsAndLast(first, last)
+        print('The first and last 3 UFO sightings in the duration time:')
+        printUfosTable(ltUfos)
+        
     else:
         print('The UFO sightings in the duration time:')
         printUfosTable(InRange[0])
@@ -169,10 +169,9 @@ def PrintReq3(InRange, inf, sup, top5):
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
         last = controller.getLast(InRange[0], 3)
-        print('The first 3 UFO sightings in this time are:')
-        printUfosTable(first)
-        print('\nThe last 3 UFO sightings in this time are:')
-        printUfosTable(last)
+        ltUfos = controller.FirtsAndLast(first, last)
+        print('The first and last 3 UFO sightings in this time are:')
+        printUfosTable(ltUfos)
     else:
         print('The UFO sightings in this time are:')
         printUfosTable(InRange[0])
@@ -188,10 +187,9 @@ def PrintReq4(InRange, inf, sup, top5):
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
         last = controller.getLast(InRange[0], 3)
-        print('The first 3 UFO sightings in this time are:')
-        printUfosTable(first)
-        print('\nThe last 3 UFO sightings in this time are:')
-        printUfosTable(last)
+        ltUfos = controller.FirtsAndLast(first, last)
+        print('The first and last 3 UFO sightings in this time are:')
+        printUfosTable(ltUfos)
     else:
         print('The UFO sightings in this time are:')
         printUfosTable(InRange[0])
@@ -205,10 +203,10 @@ def PrintReq5 (InRange, infLatitud, supLatitud, infLongitud, supLongitud):
     if InRange[1] > 10:
         first = controller.getFirst(InRange[0], 5)
         last = controller.getLast(InRange[0], 5)
-        print('The first 5 UFO sightings in this time are:')
-        printLastTable(first)
-        print('\nThe last 5 UFO sightings in this time are:')
-        printLastTable(last)
+        ltUfos = controller.FirtsAndLast(first, last)
+        print('The first and last 5 UFO sightings in this time are:')
+        printLastTable(ltUfos)
+
     elif InRange[1] != 0:
         print('The UFO sightings in this time are:')
         printLastTable(InRange[0])
