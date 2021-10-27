@@ -104,14 +104,6 @@ def printLastTable(info):
                     i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
     print(x)
 
-def print6Table(info):
-    x = PrettyTable(hrules=prettytable.ALL)
-    x.field_names = ['Latitude', 'Longitude']
-    for i in lt.iterator(info):
-        x.add_row([i["latitude"], i["longitude"]])
-    print(x)
-
-    
             
 
 def PrintReq1(cityname, topcities, cityinfo):
@@ -358,7 +350,7 @@ while True:
         # Arreglar Coordenadas
         InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
         first = controller.getFirst(InRange[0], 5)
-        print6Table(first)
+        primer = printLastTable(first)
 
         map = folium.Map(location = [infLatitud, supLongitud],
                  min_lot=infLongitud,
@@ -366,7 +358,13 @@ while True:
                  min_lat=infLatitud,
                  max_lat=supLatitud,
                  zoom_start = 10)
-        map.save('map.html')
+
+        tooltip = "Click me!"
+        # Para anañadir los marcadores al mapa se puede utilizar la funcion a continuacion
+        folium.Marker(
+            [35.0844, -106.651], popup="<i>Punto 1</i>", tooltip=tooltip
+        ).add_to(map)
+        
 
         
 
