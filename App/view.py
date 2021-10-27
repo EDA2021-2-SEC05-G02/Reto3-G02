@@ -34,7 +34,7 @@ assert cf
 import time as tm
 import folium
 import webbrowser
-import os
+import pandas as pd
 
 
 
@@ -96,13 +96,24 @@ def printUfosTable(info):
                     i["shape"], i["duration (seconds)"]])
     print(x)
 
-def printLastTable(info):
+def printLastTable(info, headers=True):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Datetime", "City", "State", "Country", "Shape", "Duration (seconds)", 'Latitude', 'Longitude']
     for i in lt.iterator(info):
         x.add_row([ i["datetime"], i["city"], 
                     i["state"], i["country"], 
                     i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
+    raw = x.get_string()
+    data = [tuple(filter(None, map(str.strip, splitline)))
+            for line in raw.splitlines()
+            for splitline in [line.split('|')] if len(splitline) > 1]
+    if x.title is not None:
+        data = data[1:]
+    if not headers:
+        data = data[1:]
+    with open('locations.csv', 'w') as f:
+        for d in data:
+            f.write('{}\n'.format(','.join(d)))
     print(x)
 
             
@@ -335,11 +346,11 @@ while True:
         PrintReq5(InRange, minLatitud, maxLatitud, maxLongitud, minLongitud)
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
         
+        
         print("(Bono) Visualizar los avistamientos de una zona geográfica")
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
 
         if bono == 'si':
-
             map = folium.Map(location = [infLatitud, supLongitud],
                     min_lot=infLongitud,
                     max_lot=supLongitud,
@@ -347,11 +358,11 @@ while True:
                     max_lat=supLatitud,
                     zoom_start = 6)
 
+            df = pd.read_csv('locations.csv')
             tooltip = "Click me!"
-            # Para anañadir los marcadores al mapa se puede utilizar la funcion a continuacion
-            folium.Marker(
-                [35.0844, -106.651], popup="<i>Punto 1</i>", tooltip=tooltip
-                ).add_to(map)
+            df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
+                                              radius=10,Tooltip=tooltip, popup=row["City"])
+                                             .add_to(map), axis=1)
 
             map.save("map.html")
             webbrowser.open('map.html')
