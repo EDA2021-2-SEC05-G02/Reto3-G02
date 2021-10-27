@@ -185,7 +185,7 @@ def updatelatitudeIndex (mapa, ufo):
     -Si no se encuentra, crea un nodo para esa latitud en el
      arbol.
     """
-    ufolatitud = ufo['latitude']
+    ufolatitud = round(ufo['latitude'],2)
     entry = om.get(mapa, ufolatitud)
     if entry is None:
         latitudentry = newlatitude(ufolatitud)
@@ -206,7 +206,7 @@ def updatelongitudeIndex (mapa, ufo):
     -Si no se encuentra, crea un nodo para esa longitud en el
      arbol.
     """
-    ufolongitud = ufo['longitude']
+    ufolongitud = round(ufo['longitude'],2)
     entry = om.get(mapa, ufolongitud)
     if entry is None:
         longitudentry = newlongitude(ufolongitud)
@@ -265,7 +265,7 @@ def newlatitude(latitud):
     binario.
     """
     entry = {'latitude': None, 'longitude':None,'ufos': None, 'size':0}
-    entry['latitude'] = round(latitud, 2)
+    entry['latitude'] = latitud
     entry['longitude'] = om.newMap(omaptype='BST',
                                   comparefunction=compareFloat)
     entry['ufos'] = lt.newList('ARRAY_LIST')
@@ -277,7 +277,7 @@ def newlongitude(longitud):
     binario.
     """
     entry = {'longitude': None,'ufos': None, 'size':0}
-    entry['longitude'] = round(longitud,2)
+    entry['longitude'] = longitud
     entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
 
