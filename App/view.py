@@ -367,12 +367,9 @@ while True:
             map.save("map.html")
             webbrowser.open('map.html')
             
-
-            print('\nPuede abrir el map.html en cualquier navegador para visualizar el mapa creado')
-
             end = tm.process_time()
             total_time = (end - start)
-            print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+            print("The time it took to execute the requirement (bono) was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
         
     else:
         sys.exit(0)
