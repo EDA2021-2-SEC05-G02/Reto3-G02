@@ -320,9 +320,16 @@ while True:
         maxLatitud = max(infLatitud, supLatitud)
         minLongitud = min(infLongitud, supLongitud)
         maxLongitud = max(infLongitud, supLongitud)
+
+        start = tm.process_time()
         
         InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
+
+        end = tm.process_time()
+        total_time = (end - start)
+
         PrintReq5(InRange, minLatitud, maxLatitud, maxLongitud, minLongitud)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
     else:
         sys.exit(0)
