@@ -111,9 +111,9 @@ def printLastTable(info, headers=True):
         data = data[1:]
     if not headers:
         data = data[1:]
-    with open('Maps\locations.csv', 'w') as f:
+    with open('Maps\locations.csv', 'w') as file:
         for d in data:
-            f.write('{}\n'.format(','.join(d)))
+            file.write('{}\n'.format(','.join(d)))
     print(x)
 
             
@@ -354,8 +354,7 @@ while True:
                     min_lot=infLongitud,
                     max_lot=supLongitud,
                     min_lat=infLatitud,
-                    max_lat=supLatitud,
-                    zoom_start = 6)
+                    max_lat=supLatitud)
 
             df = pd.read_csv('Maps\locations.csv')
             tooltip = "Click me!"
