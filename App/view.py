@@ -181,10 +181,10 @@ def PrintReq4(InRange, inf, sup, top5):
         printUfosTable(InRange[0])
 
 def PrintReq5 (InRange, infLatitud, supLatitud, infLongitud, supLongitud):
-    print("="*15, " Req No. 4 Inputs ", "="*15)
+    print("="*15, " Req No. 5 Inputs ", "="*15)
     print("UFO Sightings between latitude range:", infLatitud, "and", supLatitud)
     print("plus longitude range:", infLongitud, "and", supLongitud ,"\n")
-    print("="*15, " Req No. 4 Answer ", "="*15)
+    print("="*15, " Req No. 5 Answer ", "="*15)
     print("There are", InRange[1], "different UFOS sightings in the current area")
     if InRange[1] > 10:
         first = controller.getFirst(InRange[0], 5)
