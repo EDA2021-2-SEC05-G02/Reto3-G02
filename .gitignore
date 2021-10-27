@@ -142,4 +142,5 @@ dmypy.json
 !Data/category-id.csv
 !Data/videos-small.csv
 
+*.html
 .vim

@@ -33,6 +33,8 @@ import datetime
 assert cf
 import time as tm
 import folium
+import webbrowser
+import os
 
 
 
@@ -350,6 +352,9 @@ while True:
             folium.Marker(
                 [35.0844, -106.651], popup="<i>Punto 1</i>", tooltip=tooltip
                 ).add_to(map)
+
+            map.save("map.html")
+            webbrowser.open('map.html')
             
 
             print('\nPuede abrir el map.html en cualquier navegador para visualizar el mapa creado')
