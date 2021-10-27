@@ -471,6 +471,7 @@ def getTopDate(catalog):
 
 def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
     """
+    Req 5:
     Busca la los avistamientos en el rango dado, con el metodo values(),
     Agrega a una lista los avistamientos que se encuentran en el rango
     de latitud y longitud dado.
