@@ -1,0 +1,7 @@
+Datetime,City,State,Country,Shape,Duration (seconds),Latitude,Longitude
+2002-12-14 05:00:00,el paso,tx,us,unknown,120.0,31.7586111,-106.4863889
+2004-08-23 21:00:00,silver city,nm,us,light,1800.0,32.77,-108.2797222
+2004-08-15 00:16:00,roswell,nm,us,disk,780.0,33.3941667,-104.5225
+1997-02-05 22:00:00,albuquerque,nm,us,flash,180.0,35.0844444,-106.6505556
+2008-07-04 22:30:00,albuquerque,nm,us,sphere,4.0,35.0844444,-106.6505556
+2012-11-08 23:00:00,tucumcari,nm,us,flash,10.0,35.1716667,-103.7244444

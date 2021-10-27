@@ -111,7 +111,7 @@ def printLastTable(info, headers=True):
         data = data[1:]
     if not headers:
         data = data[1:]
-    with open('locations.csv', 'w') as f:
+    with open('Maps\locations.csv', 'w') as f:
         for d in data:
             f.write('{}\n'.format(','.join(d)))
     print(x)
@@ -359,14 +359,14 @@ while True:
                     max_lat=supLatitud,
                     zoom_start = 6)
 
-            df = pd.read_csv('locations.csv')
+            df = pd.read_csv('Maps\locations.csv')
             tooltip = "Click me!"
             df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
                                               radius=10,Tooltip=tooltip, popup=row["City"])
                                              .add_to(map), axis=1)
 
-            map.save("map.html")
-            webbrowser.open('map.html')
+            map.save("Maps\map.html")
+            webbrowser.open('Maps\map.html')
             
             end = tm.process_time()
             total_time = (end - start)
