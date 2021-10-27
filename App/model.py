@@ -193,7 +193,6 @@ def updatelatitudeIndex (mapa, ufo):
     else:
         latitudentry = me.getValue(entry)
 
-    lt.addLast(latitudentry['ufos'], ufo)
     latitudentry['size'] += 1
     updatelongitudeIndex(latitudentry['longitude'], ufo)
 
@@ -264,11 +263,10 @@ def newlatitude(latitud):
     Crea una entrada en el indice por latitud, es decir en el arbol
     binario.
     """
-    entry = {'latitude': None, 'longitude':None,'ufos': None, 'size':0}
+    entry = {'latitude': None, 'longitude':None, 'size':0}
     entry['latitude'] = latitud
     entry['longitude'] = om.newMap(omaptype='BST',
                                   comparefunction=compareFloat)
-    entry['ufos'] = lt.newList('ARRAY_LIST')
     return entry
 
 def newlongitude(longitud):
@@ -470,6 +468,20 @@ def getTopDate(catalog):
                 'count': value['size']}
         lt.addLast(ltUfos, info)
     return ltUfos, size
+
+def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
+    mapa = catalog['latitudeIndex']
+    ltUfos = lt.newList('ARRAY_LIST')
+    rangeLatitud = om.values(mapa,minLatitud,maxLatitud)
+
+    for latitud in lt.iterator(rangeLatitud):
+        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud)
+        for longitud in lt.iterator(rangeLongitud):
+            for ufo in lt.iterator(longitud['ufos']):
+                lt.addLast(ltUfos, ufo)
+        
+
+    return ltUfos, lt.size(ltUfos)
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista

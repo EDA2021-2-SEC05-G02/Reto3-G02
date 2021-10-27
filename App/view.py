@@ -287,7 +287,17 @@ while True:
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     
     elif int(inputs[0]) == 6: #Req 5
-        pass
+        infLatitud = round(float(input("Ingresa la latitud minima: ")),2)
+        supLatitud = round(float(input("Ingresa la latitud maxima: ")),2)
+        infLongitud = round(float(input("Ingresa la longitud minima: ")),2)
+        supLongitud = round(float(input("Ingresa la longitud maxima: ")),2)
+
+        minLatitud = min(infLatitud, supLatitud)
+        maxLatitud = max(infLatitud, supLatitud)
+        minLongitud = min(infLongitud, supLongitud)
+        maxLongitud = max(infLongitud, supLongitud)
+        
+        InRange = controller.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
 
     else:
         sys.exit(0)

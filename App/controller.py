@@ -139,3 +139,9 @@ def getTopDate(catalog):
     Req 4
     """
     return model.getTopDate(catalog)
+
+def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
+    """
+    Req 5
+    """
+    return model.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
