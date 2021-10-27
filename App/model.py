@@ -86,7 +86,7 @@ def addUFO(catalog, ufo):
 
     for key in info:
         if info[key] == "":
-            info[key] = "Unknown"
+            info[key] = "unknown"
 
     lt.addLast(catalog['Ufos'], info)
     updateCityIndex(catalog['cityIndex'], info)
@@ -324,7 +324,6 @@ def getUFOTopCity(catalog):
     """
     lista = lt.newList('ARRAY_LIST')
     keys = om.keySet(catalog['cityIndex']) 
-    size = 0
     for key in lt.iterator(keys):
         entry = om.get(catalog['cityIndex'], key)
         value = me.getValue(entry)
@@ -390,7 +389,6 @@ def getUFOByDuration(catalog, minimo, maximo):
             -List: Lista de avistamientos en el rango de duracion dado
             -Int: El numero total de avistamientos en el rango de duracion dado
     """
-    # Organizar valores por fechas
     ltUfos = lt.newList('ARRAY_LIST')
     values = om.values(catalog['durationIndex'], minimo, maximo)
     for value in lt.iterator(values):
@@ -431,6 +429,44 @@ def getTopTime(catalog):
     ltUfos = lt.newList('ARRAY_LIST')
     for value in lt.iterator(top5):
         info = {'time': value['time'],
+                'count': value['size']}
+        lt.addLast(ltUfos, info)
+    return ltUfos, size
+
+def getUFOinDate(catalog, inf, sup):
+    """
+    Req 4:
+    Busca la los avistamientos en el rango dado, con el metodo values(),
+    Agrega a una lista los avistamientos que se encuentran en el rango
+    de fechas dado.
+
+    param:
+        -catalog: Catalgo de Ufos
+        -inf: Fecha [AAAA-MM-DD] minima
+        -sup: Fecha [AAAA-MM-DD] maxima
+    return:
+        -tuple:
+            -List: Lista de avistamientos en el rango de fechas dado
+            -Int: El numero total de avistamientos en el rango de fechas dado
+    """
+    values = om.values(catalog['dateIndex'], inf, sup)
+    ltUfos = lt.newList('ARRAY_LIST')
+    for value in lt.iterator(values):
+        for ufo in lt.iterator(value['ufos']):
+            lt.addLast(ltUfos, ufo)
+
+    return ltUfos, lt.size(ltUfos)
+
+def getTopDate(catalog):
+    """
+    Req 4: Retorna el Top 5 fechas [AAAA-MM-DD] mas antiguas
+    """
+    mapa = catalog['dateIndex']
+    size = om.size(mapa)
+    top5 = om.values(mapa,om.minKey(mapa),om.select(mapa,4))
+    ltUfos = lt.newList('ARRAY_LIST')
+    for value in lt.iterator(top5):
+        info = {'date': value['date'],
                 'count': value['size']}
         lt.addLast(ltUfos, info)
     return ltUfos, size

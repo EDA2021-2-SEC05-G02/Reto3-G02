@@ -77,6 +77,13 @@ def PrintTopTime(info):
         x.add_row([ i["time"], i["count"]])
     print(x)
 
+def PrintTopDate(info):
+    x = PrettyTable(hrules=prettytable.ALL)
+    x.field_names = ["Date", "Count"]
+    for i in lt.iterator(info):
+        x.add_row([ i["date"], i["count"]])
+    print(x)
+
 def printUfosTable(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Datetime", "City", "State", "Country", "Shape", "Duration (seconds)"]
@@ -145,8 +152,24 @@ def PrintReq3(InRange, inf, sup, top5):
         print('The UFO sightings in this time are:')
         printUfosTable(InRange[0])
 
-def PrintReq4 ():
-    pass
+def PrintReq4(InRange, inf, sup, top5):
+    print("="*15, " Req No. 4 Inputs ", "="*15)
+    print("UFO Sightings between:", inf, "and", sup ,"\n")
+    print("="*15, " Req No. 4 Answer ", "="*15)
+    print("There are", top5[1], "different UFO sightings dates [YYYY-MM-DD]")
+    print("The 5 oldest dates for UFO sightings are:")
+    PrintTopDate(top5[0])
+    print("There are", InRange[1], "sightings between:", inf, "and", sup)
+    if InRange[1] > 6:
+        first = controller.getFirst(InRange[0], 3)
+        last = controller.getLast(InRange[0], 3)
+        print('The first 3 UFO sightings in this time are:')
+        printUfosTable(first)
+        print('\nThe last 3 UFO sightings in this time are:')
+        printUfosTable(last)
+    else:
+        print('The UFO sightings in this time are:')
+        printUfosTable(InRange[0])
 
 def PrintReq5 ():
     pass
@@ -202,15 +225,15 @@ while True:
         end = tm.process_time()
         total_time = (end - start)
 
-        PrintReq1(cityname, topcities, cityinfo)
-            
+        PrintReq1(cityname, topcities, cityinfo) 
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
     elif int(inputs[0]) == 3: #Req 2
-        start = tm.process_time()
-
         minimo = float(input('Ingrese el valor minimo: '))
         maximo = float(input('Ingrese el valor maximo: '))
+
+        start = tm.process_time()
+
         duration = controller.getUFOTopDuration(catalog)
         dur = controller.getUFOByDuration(catalog, minimo, maximo)
 
@@ -218,7 +241,6 @@ while True:
         total_time = (end - start)
 
         PrintReq2(dur, minimo, maximo, duration)
-
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
 
@@ -237,11 +259,24 @@ while True:
         total_time = (end - start)
 
         PrintReq3(InRange, inf, sup, top5)
-
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     
     elif int(inputs[0]) == 5: #Req 4
-        pass
+        inicial = input("Ingresa la fecha inicial (AAAA-MM-DD): ")
+        final = input("Ingresa la fecha final (AAAA-MM-DD): ")
+        inf = datetime.datetime.strptime(inicial, '%Y-%m-%d').date()
+        sup = datetime.datetime.strptime(final, '%Y-%m-%d').date()
+
+        start = tm.process_time()
+
+        InRange = controller.getUFOinDate(catalog, inf, sup)    
+        top5 = controller.getTopDate(catalog)
+
+        end = tm.process_time()
+        total_time = (end - start)
+
+        PrintReq4(InRange, inf, sup, top5)
+        print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     
     elif int(inputs[0]) == 6: #Req 5
         pass
