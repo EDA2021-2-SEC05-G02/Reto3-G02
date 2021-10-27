@@ -345,7 +345,7 @@ while True:
                     max_lot=supLongitud,
                     min_lat=infLatitud,
                     max_lat=supLatitud,
-                    zoom_start = 10)
+                    zoom_start = 6)
 
             tooltip = "Click me!"
             # Para anañadir los marcadores al mapa se puede utilizar la funcion a continuacion
