@@ -35,7 +35,6 @@ import time as tm
 import folium
 import webbrowser
 import pandas as pd
-import os
 import csv
 
 
@@ -346,7 +345,7 @@ while True:
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
 
         if bono == 'si':
-            map = folium.Map(location = [infLatitud, supLongitud],
+            mapa = folium.Map(location = [infLatitud, supLongitud],
                     min_lot=infLongitud,
                     max_lot=supLongitud,
                     min_lat=infLatitud,
@@ -356,11 +355,10 @@ while True:
             tooltip = "Click me!"
             df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
                                               radius=10,Tooltip=tooltip, popup=folium.Popup('City: ' + row['City'] + '<br>' + 'Datetime: ' + row['Datetime'], 
-                                              min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(map), axis=1)
+                                              min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(mapa), axis=1)
 
-            map.save("Maps\map.html")
+            mapa.save("Maps\map.html")
             webbrowser.open('Maps\map.html')
-            os.remove('Maps\locations.csv')
             end = tm.process_time()
             total_time = (end - start)
             print("The time it took to execute the requirement (bono) was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
