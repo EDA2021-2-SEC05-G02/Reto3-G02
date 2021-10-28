@@ -345,14 +345,15 @@ while True:
             continue 
         print("(Bono) Visualizar los avistamientos de una zona geográfica")
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
-        start = tm.process_time()
         if bono == 'si':
+            start = tm.process_time()
             controller.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)
+            end = tm.process_time()
+            total_time = (end - start)
+            print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
         elif bono == 'no':
             os.remove('Maps\locations.csv')
-        end = tm.process_time()
-        total_time = (end - start)
-        print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+        
     else:
         sys.exit(0)
         
