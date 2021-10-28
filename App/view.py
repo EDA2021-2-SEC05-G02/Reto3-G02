@@ -36,6 +36,7 @@ import folium
 import webbrowser
 import pandas as pd
 import os
+import csv
 
 
 
@@ -104,17 +105,11 @@ def printLastTable(info, headers=True):
         x.add_row([ i["datetime"], i["city"], 
                     i["state"], i["country"], 
                     i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
-    raw = x.get_string()
-    data = [tuple(filter(None, map(str.strip, splitline)))
-            for line in raw.splitlines()
-            for splitline in [line.split('|')] if len(splitline) > 1]
-    if x.title is not None:
-        data = data[1:]
-    if not headers:
-        data = data[1:]
-    with open('Maps\locations.csv', 'w') as file:
-        for d in data:
-            file.write('{}\n'.format(','.join(d)))
+    data = x.get_string()
+    info = [tuple(filter(None, map(str.strip, splitline))) for line in data.splitlines() for splitline in [line.split("|")] if len(splitline) > 1]
+    with open('Maps\locations.csv', 'w') as locations:
+        writer = csv.writer(locations)
+        writer.writerows(info)
     print(x)
 
             
