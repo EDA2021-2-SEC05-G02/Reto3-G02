@@ -33,6 +33,7 @@ import datetime
 assert cf
 import time as tm
 import csv
+import os
 
 
 
@@ -348,5 +349,7 @@ while True:
             total_time = (end - start)
             print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     else:
+        os.remove("Maps\locations.csv")
         sys.exit(0)
+        
 sys.exit(0)
