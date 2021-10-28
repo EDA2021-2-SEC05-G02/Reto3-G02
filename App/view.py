@@ -58,32 +58,28 @@ catalog = None
 
 # Funciones para la impresión de tablas
 
-def PrintTopCities(info):
+def PrintTopCities(city, count):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["City", "Count"]
-    for i in lt.iterator(info):
-        x.add_row([ i["city"], i["count"]])
+    x.add_row([city, count])
     print(x)
 
 def PrintTopDuration(info):
     x = PrettyTable(hrules=prettytable.ALL)
-    x.field_names = ["Duration", "Count"]
-    for i in lt.iterator(info):
-        x.add_row([ i["duration"], i["count"]])
+    x.field_names = ["Duration (seconds)", "Count"]
+    x.add_row([info["duration"], info["size"]])
     print(x)
 
 def PrintTopTime(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Time", "Count"]
-    for i in lt.iterator(info):
-        x.add_row([ i["time"], i["count"]])
+    x.add_row([info["time"], info["size"]])
     print(x)
 
 def PrintTopDate(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Date", "Count"]
-    for i in lt.iterator(info):
-        x.add_row([ i["date"], i["count"]])
+    x.add_row([info["date"], info["size"]])
     print(x)
 
 def printUfosTable(info):
@@ -111,14 +107,13 @@ def printLastTable(info):
 
             
 
-def PrintReq1(cityname, topcities, cityinfo):
+def PrintReq1(cityname, top, cityinfo):
     print("="*15, " Req No. 1 Inputs ", "="*15)
     print("UFO Sightings in the city of:", cityname,"\n")
     print("="*15, " Req No. 1 Answer ", "="*15)
-    print("There are", topcities[1], "different cities with UFO sightings...")
+    print("There are", top[2], "different cities with UFO sightings...")
     print("The city with most UFO sightings is:")
-    top = controller.getFirst(topcities[0],1)
-    PrintTopCities(top)
+    PrintTopCities(top[0], top[1])
     print("\nThere are",cityinfo[1],"sightings at the:", cityname,"city")
 
     if lt.size(cityinfo[0]) > 6:
@@ -132,14 +127,13 @@ def PrintReq1(cityname, topcities, cityinfo):
         print('The UFO sightings in the city are:')
         printUfosTable(cityinfo[0])
 
-def PrintReq2 (InRange, inf, sup, top5):
+def PrintReq2 (InRange, inf, sup, top):
     print("="*15, " Req No. 2 Inputs ", "="*15)
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 2 Answer ", "="*15)
-    print("There are", top5[1], "different UFO sightings durations...\n")
+    print("There are", top[1], "different UFO sightings durations...\n")
     print("The longest UFO sighting duration(seconds) is:")
-    top = controller.getLast(top5[0],1)
-    PrintTopDuration(top)
+    PrintTopDuration(top[0])
     print("\nThere are", InRange[1],"sightings between", inf, "and", sup, "duration.")
 
     if InRange[1] > 6:
@@ -153,14 +147,13 @@ def PrintReq2 (InRange, inf, sup, top5):
         print('The UFO sightings in the duration time:')
         printUfosTable(InRange[0])
 
-def PrintReq3(InRange, inf, sup, top5):
+def PrintReq3(InRange, inf, sup, top):
     print("="*15, " Req No. 3 Inputs ", "="*15)
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 3 Answer ", "="*15)
-    print("There are", top5[1], "different UFO sightings times [HH:MM:SS]")
+    print("There are", top[1], "different UFO sightings times [HH:MM:SS]")
     print("The latest UFO sighting time is:")
-    top = controller.getLast(top5[0],1)
-    PrintTopTime(top)
+    PrintTopTime(top[0])
     print("There are", InRange[1], "sightings between:", inf, "and", sup)
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
@@ -172,14 +165,13 @@ def PrintReq3(InRange, inf, sup, top5):
         print('The UFO sightings in this time are:')
         printUfosTable(InRange[0])
 
-def PrintReq4(InRange, inf, sup, top5):
+def PrintReq4(InRange, inf, sup, top):
     print("="*15, " Req No. 4 Inputs ", "="*15)
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 4 Answer ", "="*15)
-    print("There are", top5[1], "different UFO sightings dates [YYYY-MM-DD]")
+    print("There are", top[1], "different UFO sightings dates [YYYY-MM-DD]")
     print("The oldest UFO sighting date is:")
-    top = controller.getFirst(top5[0],1)
-    PrintTopDate(top)
+    PrintTopDate(top[0])
     print("There are", InRange[1], "sightings between:", inf, "and", sup)
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
@@ -344,14 +336,14 @@ while True:
         if InRange[1] == 0:
             continue 
         print("(Bono) Visualizar los avistamientos de una zona geográfica")
-        bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
+        bono = input("¿Desea ejecutar el bono? (si/no): ").lower()
         if bono == 'si':
             start = tm.process_time()
             controller.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)
             end = tm.process_time()
             total_time = (end - start)
             print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
-        elif bono == 'no':
+        else:
             os.remove('Maps\locations.csv')
         
     else:

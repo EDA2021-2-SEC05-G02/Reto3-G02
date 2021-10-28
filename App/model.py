@@ -331,19 +331,19 @@ def getUFOTopCity(catalog):
     """
     Req 1: Retorna el Top 5 ciudades con mas avistamientos
     """
-    lista = lt.newList('ARRAY_LIST')
     keys = om.keySet(catalog['cityIndex']) 
+    topCity = None
+    topCount = 0
     for key in lt.iterator(keys):
         entry = om.get(catalog['cityIndex'], key)
         value = me.getValue(entry)
-        info={'city': key,
-              'count': value['size']}
-        lt.addLast(lista, info)
+        
+        if value['size'] > topCount:
+            topCount = value['size']
+            topCity = value['city']
 
-    mer.sort(lista, cmpByCount)
-    five = getFirst(lista, 5)
 
-    return five, lt.size(keys)
+    return topCity, topCount, lt.size(keys)
 
 def getUFOByCity(catalog, city):
     """
@@ -374,13 +374,8 @@ def getUFOTopDuration(catalog):
     """
     mapa = catalog['durationIndex']
     size = om.size(mapa)
-    top5 = om.values(mapa,om.select(mapa,size-5),om.maxKey(mapa))
-    ltUfos = lt.newList('ARRAY_LIST')
-    for value in lt.iterator(top5):
-        info = {'duration': value['duration'],
-                'count': value['size']}
-        lt.addLast(ltUfos, info)
-    return ltUfos, size
+    top = om.get(mapa,om.maxKey(mapa))['value']
+    return top, size
 
 def getUFOByDuration(catalog, minimo, maximo):
     """
@@ -434,13 +429,8 @@ def getTopTime(catalog):
     """
     mapa = catalog['timeIndex']
     size = om.size(mapa)
-    top5 = om.values(mapa,om.select(mapa,size-5),om.maxKey(mapa))
-    ltUfos = lt.newList('ARRAY_LIST')
-    for value in lt.iterator(top5):
-        info = {'time': value['time'],
-                'count': value['size']}
-        lt.addLast(ltUfos, info)
-    return ltUfos, size
+    top = om.get(mapa,om.maxKey(mapa))['value']
+    return top, size
 
 def getUFOinDate(catalog, inf, sup):
     """
@@ -472,13 +462,8 @@ def getTopDate(catalog):
     """
     mapa = catalog['dateIndex']
     size = om.size(mapa)
-    top5 = om.values(mapa,om.minKey(mapa),om.select(mapa,4))
-    ltUfos = lt.newList('ARRAY_LIST')
-    for value in lt.iterator(top5):
-        info = {'date': value['date'],
-                'count': value['size']}
-        lt.addLast(ltUfos, info)
-    return ltUfos, size
+    top = om.get(mapa, om.minKey(mapa))['value']
+    return top, size
 
 def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
     """
