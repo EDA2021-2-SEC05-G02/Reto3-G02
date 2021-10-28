@@ -97,7 +97,7 @@ def printUfosTable(info):
                     i["shape"], i["duration (seconds)"]])
     print(x)
 
-def printLastTable(info, headers=True):
+def printLastTable(info):
     x = PrettyTable(hrules=prettytable.ALL)
     x.field_names = ["Datetime", "City", "State", "Country", "Shape", "Duration (seconds)", 'Latitude', 'Longitude']
     for i in lt.iterator(info):
@@ -105,10 +105,10 @@ def printLastTable(info, headers=True):
                     i["state"], i["country"], 
                     i["shape"], i["duration (seconds)"], i["latitude"], i["longitude"]])
     data = x.get_string()
-    info = [tuple(filter(None, map(str.strip, splitline))) for line in data.splitlines() for splitline in [line.split("|")] if len(splitline) > 1]
+    inf = [tuple(filter(None, map(str.strip, splitline))) for line in data.splitlines() for splitline in [line.split("|")] if len(splitline) > 1]
     with open('Maps\locations.csv', 'w') as locations:
         writer = csv.writer(locations)
-        writer.writerows(info)
+        writer.writerows(inf)
     print(x)
 
             
