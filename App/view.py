@@ -32,11 +32,7 @@ from prettytable import PrettyTable
 import datetime
 assert cf
 import time as tm
-import folium
-import webbrowser
-import pandas as pd
 import csv
-import os
 
 
 
@@ -346,24 +342,7 @@ while True:
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
 
         if bono == 'si':
-            mapa = folium.Map(location = [infLatitud, supLongitud],
-                    min_lot=infLongitud,
-                    max_lot=supLongitud,
-                    min_lat=infLatitud,
-                    max_lat=supLatitud)
-
-            df = pd.read_csv('Maps\locations.csv')
-            tooltip = "Click me!"
-            df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
-                                              radius=10,Tooltip=tooltip, popup=folium.Popup('City: ' + row['City'] + '<br>' + 'Datetime: ' + row['Datetime'], 
-                                              min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(mapa), axis=1)
-
-            mapa.save("Maps\map.html")
-            webbrowser.open('Maps\map.html')
-            os.remove("Maps\locations.csv")
-            end = tm.process_time()
-            total_time = (end - start)
-            print("The time it took to execute the requirement (bono) was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+            controller.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)
             
         
     else:

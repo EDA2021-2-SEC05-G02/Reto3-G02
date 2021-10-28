@@ -147,3 +147,9 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
     Req 5
     """
     return model.getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud)
+
+def getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud):
+    """
+    Req 6
+    """
+    return model.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)

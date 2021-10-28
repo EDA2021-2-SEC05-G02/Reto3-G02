@@ -32,6 +32,11 @@ from DISClib.ADT import orderedmap as om
 from DISClib.Algorithms.Sorting import mergesort as mer
 import datetime
 assert cf
+import folium
+import webbrowser
+import pandas as pd
+import csv
+import os
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -504,6 +509,23 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
                 lt.addLast(ltUfos, ufo)
 
     return ltUfos, lt.size(ltUfos)
+
+def getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud):
+            mapa = folium.Map(location = [infLatitud, supLongitud],
+                    min_lot=infLongitud,
+                    max_lot=supLongitud,
+                    min_lat=infLatitud,
+                    max_lat=supLatitud)
+
+            df = pd.read_csv('Maps\locations.csv')
+            tooltip = "Click me!"
+            df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
+                                              radius=10,Tooltip=tooltip, popup=folium.Popup('City: ' + row['City'] + '<br>' + 'Datetime: ' + row['Datetime'], 
+                                              min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(mapa), axis=1)
+
+            mapa.save("Maps\map.html")
+            webbrowser.open('Maps\map.html')
+            os.remove("Maps\locations.csv")
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
