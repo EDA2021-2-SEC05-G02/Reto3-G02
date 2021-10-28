@@ -36,6 +36,7 @@ import folium
 import webbrowser
 import pandas as pd
 import csv
+import os
 
 
 
@@ -359,6 +360,7 @@ while True:
 
             mapa.save("Maps\map.html")
             webbrowser.open('Maps\map.html')
+            os.remove("Maps\locations.csv")
             end = tm.process_time()
             total_time = (end - start)
             print("The time it took to execute the requirement (bono) was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
