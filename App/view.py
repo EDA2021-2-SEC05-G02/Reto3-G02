@@ -33,6 +33,7 @@ import datetime
 assert cf
 import time as tm
 import csv
+import os
 
 
 
@@ -346,5 +347,7 @@ while True:
             
         
     else:
+        os.remove("Maps\locations.csv")
         sys.exit(0)
+        
 sys.exit(0)
