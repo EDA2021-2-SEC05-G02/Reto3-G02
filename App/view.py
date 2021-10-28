@@ -116,8 +116,9 @@ def PrintReq1(cityname, topcities, cityinfo):
     print("UFO Sightings in the city of:", cityname,"\n")
     print("="*15, " Req No. 1 Answer ", "="*15)
     print("There are", topcities[1], "different cities with UFO sightings...")
-    print("The TOP 5 cities with the most UFO sightings are:")
-    PrintTopCities(topcities[0])
+    print("The city with most UFO sightings is:")
+    top = controller.getFirst(topcities[0],1)
+    PrintTopCities(top)
     print("\nThere are",cityinfo[1],"sightings at the:", cityname,"city")
 
     if lt.size(cityinfo[0]) > 6:
@@ -136,8 +137,9 @@ def PrintReq2 (InRange, inf, sup, top5):
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 2 Answer ", "="*15)
     print("There are", top5[1], "different UFO sightings durations...\n")
-    print("The TOP 5 duration with longest UFO sightings are: \n")
-    PrintTopDuration(top5[0])
+    print("The longest UFO sighting duration(seconds) is:")
+    top = controller.getLast(top5[0],1)
+    PrintTopDuration(top)
     print("\nThere are", InRange[1],"sightings between", inf, "and", sup, "duration.")
 
     if InRange[1] > 6:
@@ -156,8 +158,9 @@ def PrintReq3(InRange, inf, sup, top5):
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 3 Answer ", "="*15)
     print("There are", top5[1], "different UFO sightings times [HH:MM:SS]")
-    print("The 5 latest times for UFO sightings are:")
-    PrintTopTime(top5[0])
+    print("The latest UFO sighting time is:")
+    top = controller.getLast(top5[0],1)
+    PrintTopTime(top)
     print("There are", InRange[1], "sightings between:", inf, "and", sup)
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
@@ -174,8 +177,9 @@ def PrintReq4(InRange, inf, sup, top5):
     print("UFO Sightings between:", inf, "and", sup ,"\n")
     print("="*15, " Req No. 4 Answer ", "="*15)
     print("There are", top5[1], "different UFO sightings dates [YYYY-MM-DD]")
-    print("The 5 oldest dates for UFO sightings are:")
-    PrintTopDate(top5[0])
+    print("The oldest UFO sighting date is:")
+    top = controller.getFirst(top5[0],1)
+    PrintTopDate(top)
     print("There are", InRange[1], "sightings between:", inf, "and", sup)
     if InRange[1] > 6:
         first = controller.getFirst(InRange[0], 3)
@@ -341,15 +345,15 @@ while True:
             continue 
         print("(Bono) Visualizar los avistamientos de una zona geográfica")
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
-
+        start = tm.process_time()
         if bono == 'si':
-            start = tm.process_time()
             controller.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)
-            end = tm.process_time()
-            total_time = (end - start)
-            print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
+        elif bono == 'no':
+            os.remove('Maps\locations.csv')
+        end = tm.process_time()
+        total_time = (end - start)
+        print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     else:
-        os.remove("Maps\locations.csv")
         sys.exit(0)
         
 sys.exit(0)
