@@ -152,4 +152,4 @@ def getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud):
     """
     Req 6
     """
-    return model.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)
+    model.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)

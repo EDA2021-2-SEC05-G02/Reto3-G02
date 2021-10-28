@@ -342,9 +342,11 @@ while True:
         bono = (input("¿Desea ejecutar el bono? (si/no): ").lower())
 
         if bono == 'si':
+            start = tm.process_time()
             controller.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)
-            
-        
+            end = tm.process_time()
+            total_time = (end - start)
+            print("The time it took to execute the Bono was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
     else:
         sys.exit(0)
 sys.exit(0)
