@@ -236,11 +236,9 @@ while True:
 
         first = controller.getFirst(catalog['Ufos'], 5)
         last = controller.getLast(catalog['Ufos'], 5)
-        print('\nThe first 5 UFO sightings loaded:')
-        printUfosTable(first)
-        print('\nThe last 5 UFO sightings loaded:')
-        printUfosTable(last)
-
+        ufos = controller.FirtsAndLast(first,last)
+        print('\nThe first and last 5 UFO sightings loaded:')
+        printUfosTable(ufos)
 
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
@@ -262,7 +260,7 @@ while True:
         PrintReq1(cityname, topcities, cityinfo) 
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
-    elif int(inputs[0]) == 3: #Req 2
+    elif int(inputs[0]) == 3: #Req 2 - Valeria Caro
         minimo = float(input('Ingrese el valor minimo: '))
         maximo = float(input('Ingrese el valor maximo: '))
 
@@ -278,7 +276,7 @@ while True:
         print("The time it took to execute the requirement was:", total_time*1000 ,"mseg ->",total_time, "seg\n")
 
 
-    elif int(inputs[0]) == 4: #Req 3
+    elif int(inputs[0]) == 4: #Req 3 - Sofia Velasquez
         inicial = input("Ingresa el tiempo inicial (HH:MM): ")
         final = input("Ingresa el tiempo final (HH:MM): ")
         inf = datetime.datetime.strptime(inicial, '%H:%M').time()
