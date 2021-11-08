@@ -150,6 +150,6 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
 
 def getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud):
     """
-    Req 6
+    Req 6 (Bono)
     """
     model.getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud)

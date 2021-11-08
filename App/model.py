@@ -53,19 +53,19 @@ def newCatalog():
 
     catalog['Ufos'] = lt.newList('ARRAY_LIST')
 
-    catalog['cityIndex'] = om.newMap(omaptype='BST',
+    catalog['cityIndex'] = om.newMap(omaptype='RBT',
                                      comparefunction=compareString)
 
-    catalog['durationIndex'] = om.newMap(omaptype='BST',
+    catalog['durationIndex'] = om.newMap(omaptype='RBT',
                                      comparefunction=compareFloat)
                         
-    catalog['timeIndex'] = om.newMap(omaptype='BST',
+    catalog['timeIndex'] = om.newMap(omaptype='RBT',
                                      comparefunction=compareTime)
                                     
-    catalog['dateIndex'] = om.newMap(omaptype='BST',
+    catalog['dateIndex'] = om.newMap(omaptype='RBT',
                                      comparefunction=compareTime)
 
-    catalog['latitudeIndex'] = om.newMap(omaptype='BST',
+    catalog['latitudeIndex'] = om.newMap(omaptype='RBT',
                                      comparefunction=compareFloat)
 
     return catalog
@@ -270,7 +270,7 @@ def newlatitude(latitud):
     """
     entry = {'latitude': None, 'longitude':None, 'size':0}
     entry['latitude'] = latitud
-    entry['longitude'] = om.newMap(omaptype='BST',
+    entry['longitude'] = om.newMap(omaptype='RBT',
                                   comparefunction=compareFloat)
     return entry
 
@@ -330,12 +330,18 @@ def indexSize(catalog, indice):
 def getUFOTopCity(catalog):
     """
     Req 1: Retorna el Top 5 ciudades con mas avistamientos
+
+    Complejidad:
+    n = numero de elementos en el RBT de ciudades
+    log2(n) = altura del RBT de ciudades
+    
+    O(n + n + log2(n)) → O(n + log(n))
     """
-    keys = om.keySet(catalog['cityIndex']) 
+    keys = om.keySet(catalog['cityIndex']) #O(n)
     topCity = None
     topCount = 0
-    for key in lt.iterator(keys):
-        entry = om.get(catalog['cityIndex'], key)
+    for key in lt.iterator(keys): #O(n)
+        entry = om.get(catalog['cityIndex'], key) #O(log2(n))
         value = me.getValue(entry)
         
         if value['size'] > topCount:
@@ -358,8 +364,14 @@ def getUFOByCity(catalog, city):
         -tuple:
             -List: Lista de avistamientos en la ciudad
             -Int: El numero total de avistamientos en la ciudad
+        
+    Complejidad:
+    n = numero de elementos en el RBT de ciudades
+    log2(n) = altura del RBT de ciudades
+    
+    O(log2(n))
     """
-    entry = om.get(catalog['cityIndex'], city)
+    entry = om.get(catalog['cityIndex'], city) #O(log2(n))
     if not entry:
         return None
     value = me.getValue(entry)
@@ -400,6 +412,21 @@ def getUFOByDuration(catalog, minimo, maximo):
             lt.addLast(ltUfos, ufo)
     return ltUfos, lt.size(ltUfos)
 
+def getTopTime(catalog):
+    """
+    Req 3: Retorna el Top 5 horas [HH:MM] mas tardias
+
+    Complejidad: 
+    n = numero de elementos en el RBT de tiempo [HH:MM]
+    log2(n) = altura del RBT de tiempo
+    
+    O(log2(n) + log2(n)) → O(log2(n))
+    """
+    mapa = catalog['timeIndex']
+    size = om.size(mapa) 
+    top = om.get(mapa,om.maxKey(mapa))['value'] #O(log2(n) + log2(n))
+    return top, size
+
 def getUFOinTime(catalog, inf, sup):
     """
     Req 3:
@@ -415,22 +442,23 @@ def getUFOinTime(catalog, inf, sup):
         -tuple:
             -List: Lista de avistamientos en el rango de tiempo dado
             -Int: El numero total de avistamientos en el rango de tiempo dado
+    
+    Complejidad: 
+    n = numero de elementos en el RBT de tiempo [HH:MM]
+    log2(n) = altura del RBT de tiempo
+    #llaves = numero de llaves en el rango dado
+    #avistamientos = numero de avistamientos en en rango de tiempo dado
+
+    n >= #llaves → siempre
+
+    O(log2(n) + n + #llaves + #avistamientos) → O(log2(n) + n + #avistamientos)
     """
-    values = om.values(catalog['timeIndex'], inf, sup)
+    values = om.values(catalog['timeIndex'], inf, sup) #O(log2(n) + n)
     ltUfos = lt.newList('ARRAY_LIST')
-    for value in lt.iterator(values):
-        for ufo in lt.iterator(value['ufos']):
+    for value in lt.iterator(values): #O(#llaves)
+        for ufo in lt.iterator(value['ufos']): #O(#avistamientos)
             lt.addLast(ltUfos, ufo)
     return ltUfos, lt.size(ltUfos)
-
-def getTopTime(catalog):
-    """
-    Req 3: Retorna el Top 5 horas [HH:MM] mas tardias
-    """
-    mapa = catalog['timeIndex']
-    size = om.size(mapa)
-    top = om.get(mapa,om.maxKey(mapa))['value']
-    return top, size
 
 def getUFOinDate(catalog, inf, sup):
     """
@@ -446,12 +474,22 @@ def getUFOinDate(catalog, inf, sup):
     return:
         -tuple:
             -List: Lista de avistamientos en el rango de fechas dado
-            -Int: El numero total de avistamientos en el rango de fechas dado
+            -Int: El numero total de avistamientos en el rango de fechas 
+    
+    Complejidad: 
+    n = numero de elementos en el RBT de fecha [AAAA:MM:DD]
+    log2(n) = altura del RBT de fecha
+    #llaves = numero de llaves en el rango dado
+    #avistamientos = numero de avistamientos en en rango de fechas dado
+
+    n >= #llaves → siempre
+
+    O(log2(n) + n + #llaves + #avistamientos) → O(log2(n) + n + #avistamientos)
     """
-    values = om.values(catalog['dateIndex'], inf, sup)
+    values = om.values(catalog['dateIndex'], inf, sup) #O(log2(n) + n)
     ltUfos = lt.newList('ARRAY_LIST')
-    for value in lt.iterator(values):
-        for ufo in lt.iterator(value['ufos']):
+    for value in lt.iterator(values): #O(#llaves)
+        for ufo in lt.iterator(value['ufos']): #O(#avistamientos)
             lt.addLast(ltUfos, ufo)
 
     return ltUfos, lt.size(ltUfos)
@@ -459,13 +497,19 @@ def getUFOinDate(catalog, inf, sup):
 def getTopDate(catalog):
     """
     Req 4: Retorna el Top 5 fechas [AAAA-MM-DD] mas antiguas
+
+    Complejidad:
+    n = numero de elementos en el RBT de fecha [AAAA:MM:DD]
+    log2(n) = altura del RBT de fecha
+
+    O(log2(n) + log2(n)) → O(log2(n))
     """
     mapa = catalog['dateIndex']
     size = om.size(mapa)
-    top = om.get(mapa, om.minKey(mapa))['value']
+    top = om.get(mapa, om.minKey(mapa))['value'] #O(log2(n) + log2(n))
     return top, size
 
-def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
+def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud): #no estoy segura de la complejidad :(
     """
     Req 5:
     Busca la los avistamientos en el rango dado, con el metodo values(),
@@ -482,35 +526,55 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
         -tuple:
             -List: Lista de avistamientos en el rango de latitud y longitud dado
             -Int: El numero total de avistamientos en el rango de latitud y longitud dado
+
+    Complejidad: 
+    
+    a = numero de elementos en el RBT de latitud
+    log2(a) = altura del RBT de latitud
+    o = numero de elementos en el RBT de longitud
+    log2(o) = altura del RBT de longitud
+    #llaves-latitud = numero de llaves en el rango de latitud dado 
+    #llaves-longitud = numero de llaves en el rango de longitud dado
+    #avistamientos = numero de avistamientos en en rango de latitud y longitud dado
+
+    a >= #llaves-latitud → siempre
+    o >= #llaves-longitud → siempre
+
+    O(log2(a) + a + #llaves-latitud + log2(o) + o + #llaves-longitud + #avistamientos)
+        → O(log2(a) + a + #llaves-latitud + #llaves-longitud + #avistamientos + log2(o) + o)
+            → O(log2(a) + a + log2(o) + o + #avistamientos)
     """
     mapa = catalog['latitudeIndex']
     ltUfos = lt.newList('ARRAY_LIST')
-    rangeLatitud = om.values(mapa,minLatitud,maxLatitud)
+    rangeLatitud = om.values(mapa,minLatitud,maxLatitud) #O(log(n) + n)
 
-    for latitud in lt.iterator(rangeLatitud):
-        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud)
-        for longitud in lt.iterator(rangeLongitud):
-            for ufo in lt.iterator(longitud['ufos']):
+    for latitud in lt.iterator(rangeLatitud): #O(#llaves-latitud)
+        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud) #O(log(n) + n)
+        for longitud in lt.iterator(rangeLongitud): #O(#llaves-longitud)
+            for ufo in lt.iterator(longitud['ufos']):#O(#avistamientos)
                 lt.addLast(ltUfos, ufo)
 
     return ltUfos, lt.size(ltUfos)
 
-def getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud):
-            mapa = folium.Map(location = [infLatitud, supLongitud],
+def getUFOMap(infLatitud, supLongitud, infLongitud, supLatitud): #ni idea de la complejidad :(
+    """
+    Req 6 (Bono)
+    """
+    mapa = folium.Map(location = [infLatitud, supLongitud],
                     min_lot=infLongitud,
                     max_lot=supLongitud,
                     min_lat=infLatitud,
                     max_lat=supLatitud)
 
-            df = pd.read_csv('Maps\locations.csv')
-            tooltip = "Click me!"
-            df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
-                                              radius=10,Tooltip=tooltip, popup=folium.Popup('City: ' + row['City'] + '<br>' + 'Datetime: ' + row['Datetime'], 
-                                              min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(mapa), axis=1)
+    df = pd.read_csv('Maps\locations.csv')
+    tooltip = "Click me!"
+    df.apply(lambda row:folium.Marker(location=[row["Latitude"], row["Longitude"]], 
+            radius=10,Tooltip=tooltip, popup=folium.Popup('City: ' + row['City'] + '<br>' + 'Datetime: ' + row['Datetime'], 
+            min_width=200, max_width=200), icon=folium.Icon(color='green')).add_to(mapa), axis=1)
 
-            mapa.save("Maps\map.html")
-            webbrowser.open('Maps\map.html')
-            os.remove("Maps\locations.csv")
+    mapa.save("Maps\map.html")
+    webbrowser.open('Maps\map.html')
+    os.remove("Maps\locations.csv")
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
