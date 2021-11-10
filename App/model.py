@@ -335,7 +335,7 @@ def getUFOTopCity(catalog):
     n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de ciudades
     
-    O(n + n + log2(n)) → O(n + log(n))
+    O(n + n + log2(n)) → O(n + log2(n))
     """
     keys = om.keySet(catalog['cityIndex']) #O(n)
     topCity = None
@@ -366,7 +366,6 @@ def getUFOByCity(catalog, city):
             -Int: El numero total de avistamientos en la ciudad
         
     Complejidad:
-    n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de ciudades
     
     O(log2(n))
@@ -417,7 +416,6 @@ def getTopTime(catalog):
     Req 3: Retorna el Top 5 horas [HH:MM] mas tardias
 
     Complejidad: 
-    n = numero de elementos en el RBT de tiempo [HH:MM]
     log2(n) = altura del RBT de tiempo
     
     O(log2(n) + log2(n)) → O(log2(n))
@@ -444,16 +442,13 @@ def getUFOinTime(catalog, inf, sup):
             -Int: El numero total de avistamientos en el rango de tiempo dado
     
     Complejidad: 
-    n = numero de elementos en el RBT de tiempo [HH:MM]
     log2(n) = altura del RBT de tiempo
     #llaves = numero de llaves en el rango dado
     #avistamientos = numero de avistamientos en en rango de tiempo dado
 
-    n >= #llaves → siempre
-
-    O(log2(n) + n + #llaves + #avistamientos) → O(log2(n) + n + #avistamientos)
+    O(log2(n) + #llaves + #llaves + #avistamientos) → O(log2(n) + #llaves + #avistamientos)
     """
-    values = om.values(catalog['timeIndex'], inf, sup) #O(log2(n) + n)
+    values = om.values(catalog['timeIndex'], inf, sup) #O(log2(n) + #llaves)
     ltUfos = lt.newList('ARRAY_LIST')
     for value in lt.iterator(values): #O(#llaves)
         for ufo in lt.iterator(value['ufos']): #O(#avistamientos)
@@ -477,16 +472,13 @@ def getUFOinDate(catalog, inf, sup):
             -Int: El numero total de avistamientos en el rango de fechas 
     
     Complejidad: 
-    n = numero de elementos en el RBT de fecha [AAAA:MM:DD]
     log2(n) = altura del RBT de fecha
     #llaves = numero de llaves en el rango dado
     #avistamientos = numero de avistamientos en en rango de fechas dado
 
-    n >= #llaves → siempre
-
-    O(log2(n) + n + #llaves + #avistamientos) → O(log2(n) + n + #avistamientos)
+    O(log2(n) + #llaves + #llaves + #avistamientos) → O(log2(n) + #llaves + #avistamientos)
     """
-    values = om.values(catalog['dateIndex'], inf, sup) #O(log2(n) + n)
+    values = om.values(catalog['dateIndex'], inf, sup) #O(log2(n) + #llaves)
     ltUfos = lt.newList('ARRAY_LIST')
     for value in lt.iterator(values): #O(#llaves)
         for ufo in lt.iterator(value['ufos']): #O(#avistamientos)
@@ -499,7 +491,6 @@ def getTopDate(catalog):
     Req 4: Retorna el Top 5 fechas [AAAA-MM-DD] mas antiguas
 
     Complejidad:
-    n = numero de elementos en el RBT de fecha [AAAA:MM:DD]
     log2(n) = altura del RBT de fecha
 
     O(log2(n) + log2(n)) → O(log2(n))
@@ -528,10 +519,7 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
             -Int: El numero total de avistamientos en el rango de latitud y longitud dado
 
     Complejidad: 
-    
-    a = numero de elementos en el RBT de latitud
     log2(a) = altura del RBT de latitud
-    o = numero de elementos en el RBT de longitud
     log2(o) = altura del RBT de longitud
     #llaves-latitud = numero de llaves en el rango de latitud dado 
     #llaves-longitud = numero de llaves en el rango de longitud dado
@@ -540,16 +528,15 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
     a >= #llaves-latitud → siempre
     o >= #llaves-longitud → siempre
 
-    O(log2(a) + a + #llaves-latitud + log2(o) + o + #llaves-longitud + #avistamientos)
-        → O(log2(a) + a + #llaves-latitud + #llaves-longitud + #avistamientos + log2(o) + o)
-            → O(log2(a) + a + log2(o) + o + #avistamientos)
+    O(log2(a) + #llaves-latitud + #llaves-latitud + log2(o) + #llaves-longitud + #llaves-longitud + #avistamientos)
+        → O(log2(a) + #llaves-latitud + log2(o) + #llaves-latitud + #avistamientos)
     """
     mapa = catalog['latitudeIndex']
     ltUfos = lt.newList('ARRAY_LIST')
-    rangeLatitud = om.values(mapa,minLatitud,maxLatitud) #O(log(n) + n)
+    rangeLatitud = om.values(mapa,minLatitud,maxLatitud) #O(log2(a) + #llaves-latitud)
 
     for latitud in lt.iterator(rangeLatitud): #O(#llaves-latitud)
-        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud) #O(log(n) + n)
+        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud) #O(log(o) + #llaves-longitud)
         for longitud in lt.iterator(rangeLongitud): #O(#llaves-longitud)
             for ufo in lt.iterator(longitud['ufos']):#O(#avistamientos)
                 lt.addLast(ltUfos, ufo)
