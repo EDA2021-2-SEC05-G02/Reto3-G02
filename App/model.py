@@ -348,7 +348,6 @@ def getUFOTopCity(catalog):
             topCount = value['size']
             topCity = value['city']
 
-
     return topCity, topCount, lt.size(keys)
 
 def getUFOByCity(catalog, city):
@@ -525,9 +524,6 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
     #llaves-longitud = numero de llaves en el rango de longitud dado
     #avistamientos = numero de avistamientos en en rango de latitud y longitud dado
 
-    a >= #llaves-latitud → siempre
-    o >= #llaves-longitud → siempre
-
     O(log2(a) + #llaves-latitud + #llaves-latitud + log2(o) + #llaves-longitud + #llaves-longitud + #avistamientos)
         → O(log2(a) + #llaves-latitud + log2(o) + #llaves-latitud + #avistamientos)
     """
@@ -634,10 +630,10 @@ def SortData(catalog):
     cityIndex = om.valueSet(catalog['cityIndex'])
     durationIndex = om.valueSet(catalog['durationIndex'])
     timeIndex = om.valueSet(catalog['timeIndex'])
-    dateIndex = om.valueSet(catalog['timeIndex'])
+    dateIndex = om.valueSet(catalog['dateIndex'])
 
     for city in lt.iterator(cityIndex):
-        mer.sort(city['ufos'], cmpDate)
+        mer.sort(city['ufos'], cmpCity)
 
     for duration in lt.iterator(durationIndex):
         mer.sort(duration['ufos'], cmpCity)
