@@ -641,8 +641,9 @@ def SortData(catalog):
         mer.sort(city['ufos'], cmpCity)
 
     for duration in lt.iterator(durationIndex):
-        mer.sort(duration['ufos'], cmpCity)
         mer.sort(duration['ufos'], cmpCountry)
+        mer.sort(duration['ufos'], cmpCity)
+        
         
     for time in lt.iterator(timeIndex):
         mer.sort(time['ufos'], cmpDate)
