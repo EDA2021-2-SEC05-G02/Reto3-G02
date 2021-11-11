@@ -638,15 +638,15 @@ def SortData(catalog):
     dateIndex = om.valueSet(catalog['dateIndex'])
 
     for city in lt.iterator(cityIndex):
-        mer.sort(city['ufos'], cmpCity)
+        mer.sort(city['ufos'], cmpDate) #Ordenarlo por fecha y hora
 
     for duration in lt.iterator(durationIndex):
-        mer.sort(duration['ufos'], cmpCountry)
-        mer.sort(duration['ufos'], cmpCity)
+        mer.sort(duration['ufos'], cmpCountry) #ordenar por pais
+        mer.sort(duration['ufos'], cmpCity) #ordenar por ciudad
         
         
     for time in lt.iterator(timeIndex):
-        mer.sort(time['ufos'], cmpDate)
+        mer.sort(time['ufos'], cmpDate) #Ordenarlo por fecha
 
     for date in lt.iterator(dateIndex):
         mer.sort(date['ufos'], cmpDate)
