@@ -382,6 +382,12 @@ def getUFOByCity(catalog, city):
 def getUFOTopDuration(catalog):
     """
     Req 2 Retorna el Top 5 duraciones mas largas
+
+    Complejidad:
+    n = numero de elementos en el RBT de duracion
+    log2(n) = altura del RBT de duracion
+    
+    O(log2(n) + log2(n)) → O(log2(n))
     """
     mapa = catalog['durationIndex']
     size = om.size(mapa)
@@ -403,6 +409,14 @@ def getUFOByDuration(catalog, minimo, maximo):
         -tuple:
             -List: Lista de avistamientos en el rango de duracion dado
             -Int: El numero total de avistamientos en el rango de duracion dado
+
+    Complejidad: 
+    n = numero de elementos en el RBT de ciudades
+    log2(n) = altura del RBT de duracion
+    #llaves = numero de llaves en el rango dado
+    #avistamientos = numero de avistamientos en en rango de duracion dado
+
+    O(log2(n) + #llaves + #llaves + #avistamientos) → O(log2(n) + #llaves + #avistamientos)
     """
     ltUfos = lt.newList('ARRAY_LIST')
     values = om.values(catalog['durationIndex'], minimo, maximo)
