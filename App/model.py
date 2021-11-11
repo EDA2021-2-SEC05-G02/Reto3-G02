@@ -335,9 +335,9 @@ def getUFOTopCity(catalog):
     n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de ciudades
     
-    O(n + n + log2(n)) → O(n + log2(n))
+    O(log2(n) + n + log2(n)) → O(n + log2(n))
     """
-    keys = om.keySet(catalog['cityIndex']) #O(n)
+    keys = om.keySet(catalog['cityIndex']) #O(log2(n))
     topCity = None
     topCount = 0
     for key in lt.iterator(keys): #O(n)
@@ -365,6 +365,7 @@ def getUFOByCity(catalog, city):
             -Int: El numero total de avistamientos en la ciudad
         
     Complejidad:
+    n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de ciudades
     
     O(log2(n))
@@ -415,6 +416,7 @@ def getTopTime(catalog):
     Req 3: Retorna el Top 5 horas [HH:MM] mas tardias
 
     Complejidad: 
+    n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de tiempo
     
     O(log2(n) + log2(n)) → O(log2(n))
@@ -441,6 +443,7 @@ def getUFOinTime(catalog, inf, sup):
             -Int: El numero total de avistamientos en el rango de tiempo dado
     
     Complejidad: 
+    n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de tiempo
     #llaves = numero de llaves en el rango dado
     #avistamientos = numero de avistamientos en en rango de tiempo dado
@@ -471,6 +474,7 @@ def getUFOinDate(catalog, inf, sup):
             -Int: El numero total de avistamientos en el rango de fechas 
     
     Complejidad: 
+    n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de fecha
     #llaves = numero de llaves en el rango dado
     #avistamientos = numero de avistamientos en en rango de fechas dado
@@ -490,6 +494,7 @@ def getTopDate(catalog):
     Req 4: Retorna el Top 5 fechas [AAAA-MM-DD] mas antiguas
 
     Complejidad:
+    n = numero de elementos en el RBT de ciudades
     log2(n) = altura del RBT de fecha
 
     O(log2(n) + log2(n)) → O(log2(n))
