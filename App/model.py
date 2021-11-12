@@ -543,15 +543,15 @@ def getUFOinLocation(catalog, minLatitud, maxLatitud, minLongitud, maxLongitud):
     #llaves-o = numero de llaves en el rango de longitud-latitud dado
     #avistamientos = numero de avistamientos en en rango de latitud y longitud dado
 
-    O(#avistamientos + log2(a)+ #llaves-a*(log(o) + #llaves-o))
+    O(#avistamientos + log2(a)+ #llaves-a)
     """
     mapa = catalog['latitudeIndex']
     ltUfos = lt.newList('ARRAY_LIST')
     rangeLatitud = om.values(mapa,minLatitud,maxLatitud)# O(log2(a) + #llaves-a)
 
     for latitud in lt.iterator(rangeLatitud):# O(#llaves-a)
-        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud)# O(#llaves-a*(log(o) + #llaves-o))
-        for longitud in lt.iterator(rangeLongitud):# O(#llaves-a*(#llaves-o))
+        rangeLongitud = om.values(latitud['longitude'], minLongitud, maxLongitud)# O(log(o) + #llaves-o)
+        for longitud in lt.iterator(rangeLongitud):# O(#llaves-o)
             for ufo in lt.iterator(longitud['ufos']):# O(#avistamientos)
                 lt.addLast(ltUfos, ufo)
 
